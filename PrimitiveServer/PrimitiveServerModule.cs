@@ -9,6 +9,9 @@ namespace PrimitiveServerModule
 {
     public class PrimitiveServer
     {
+        private static object _lock1 = new object();
+        private static object _lock2 = new object();
+
         public PrimitiveServer()
         {
         }
@@ -21,23 +24,30 @@ namespace PrimitiveServerModule
         /// <returns></returns>
         public static T GetDepth<T>(KinectVersion V)
         {
+            T depth;
+
             if (V == KinectVersion.V2)
             {
-                T depth;
-                using (var V2 = new PrimitiveDriverV2.PrimitiveDriver())
+                lock (_lock2)
                 {
-                    depth = (T)(object)V2.GetDepth();
-                }
-                return depth;
-            } else
-            {
-                T depth;
-                using (var V1 = new PrimitiveDriverV1.PrimitiveDriver())
-                {
-                    depth = (T)(object)V1.GetDepth();
+                    using (var V2 = new PrimitiveDriverV2.PrimitiveDriver())
+                    {
+                        depth = (T)(object)V2.GetDepth();
+                    }
                 }
                 return depth;
             }
-        }
+            else
+            {
+                lock (_lock1)
+                {
+                    using (var V1 = new PrimitiveDriverV1.PrimitiveDriver())
+                    {
+                        depth = (T)(object)V1.GetDepth();
+                    }
+                }
+                return depth;
+            }
+        } // End of GetDepth
     }
 }
