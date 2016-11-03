@@ -11,11 +11,12 @@ namespace AtteiTest
     public class AtteITest
     {
         [TestMethod]
-        public void PersonCount_V1_Test()
+        public void PersonCount_Test()
         {
             ushort[] d2;
             short[] d1;
 
+            
             try
             {
                 using (var fs = new FileStream(@"../../../Primitivestest/bin/Debug/DepthData/V1.obj", FileMode.Open, FileAccess.Read))
@@ -35,11 +36,24 @@ namespace AtteiTest
 
             }
 
-            /*using (var fs = new FileStream(@"DepthData/V2.obj", FileMode.Open, FileAccess.Read))
+            try
             {
-                var f = new BinaryFormatter();
-                d2 = (ushort[])f.Deserialize(fs);
-            }*/
+                using (var fs = new FileStream(@"../../../Primitivestest/bin/Debug/DepthData/V2.obj", FileMode.Open, FileAccess.Read))
+                {
+                    var f = new BinaryFormatter();
+                    d2 = (ushort[])f.Deserialize(fs);
+
+                    var date = DateTime.Now;
+                    var date_str = $"{date.Year}_{date.Month}_{date.Day}_{date.Hour}_{date.Minute}_Test";
+                    var count = Attei.Attei.PersonCounter(date_str, KinectVersion.V2, d2);
+
+                    // dependent when V2.obj gotten
+                    Assert.AreEqual(5, count);
+                }
+            }catch(Exception ex)
+            {
+
+            }
             
         }
     }

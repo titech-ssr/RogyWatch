@@ -44,9 +44,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attei.cs" />
-    <Compile Include="AtteiV1.cs" />
     <Compile Include="DebugIOV1.cs" />
+    <Compile Include="DebugIOV2.cs" />
     <Compile Include="PCLV1.cs" />
+    <Compile Include="PCLV2.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
