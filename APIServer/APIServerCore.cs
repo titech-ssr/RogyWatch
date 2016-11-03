@@ -12,9 +12,10 @@ namespace APIServerModule
     {
         T Get<T>(string command);
         object GetDepth(KinectVersion v);
+        int HowManyPeople(string date);
     }
 
-    public class APIServerCore : IAPIServerCore
+    public partial class APIServerCore : IAPIServerCore
     {
         public T Get<T>(string command)
         {
@@ -24,9 +25,14 @@ namespace APIServerModule
         public object GetDepth(KinectVersion v)
         {
             if (v == KinectVersion.V1)
-                return (short[])(object)PrimitiveServer.GetDepth<short[]>(v);
+                return PrimitiveServer.GetDepth<short[]>(v);
             else
-                return (ushort[])(object)PrimitiveServer.GetDepth<ushort[]>(v);
+                return PrimitiveServer.GetDepth<ushort[]>(v);
+        }
+
+        public int HowManyPeople(string date)
+        {
+            throw new NotImplementedException();
         }
     }
 }
