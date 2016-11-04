@@ -8,6 +8,9 @@ using PrimitiveServerModule;
 
 namespace APIServerModule
 {
+    /// <summary>
+    /// for Pipe or UDP Server
+    /// </summary>
     public interface IAPIServerCore
     {
         T Get<T>(string command);
@@ -31,6 +34,24 @@ namespace APIServerModule
         }
 
         public int HowManyPeople(string date)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public static class ControlServerCore
+    {
+        public static string kill(string line)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static string Eval(string code)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static int HowManyPeople(string date)
         {
             throw new NotImplementedException();
         }

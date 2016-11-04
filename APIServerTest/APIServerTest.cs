@@ -25,6 +25,8 @@ namespace APIServerTest
             return ar;
         }
 
+        public int HowManyPeople(string line) { return 0; }
+
         public string Test(string i) { return i; }
         public ushort[] Ushort() { return new ushort[] { 1, 2, 3, 4 }; }
     }
