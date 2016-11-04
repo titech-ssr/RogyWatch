@@ -67,5 +67,12 @@ namespace APIServerTest
             Console.ReadLine();
             APIServerExterior.CloseWebSocket();
         }
+
+        [TestMethod]
+        public void ControlServerCore_Test()
+        {
+            Assert.AreEqual(ControlServerCore.Echo(new [] { "1", "2" }), "Hello 12");
+            Assert.AreEqual(ControlServerCore.Invoke("Echo 1 2").ToString(), "Hello 12");
+        }
     }
 }

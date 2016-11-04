@@ -41,19 +41,37 @@ namespace APIServerModule
 
     public static class ControlServerCore
     {
-        public static string kill(string line)
+        public static string kill(IEnumerable<string> line)
         {
             throw new NotImplementedException();
         }
 
-        public static string Eval(string code)
+        public static string Eval(IEnumerable<string> code)
         {
             throw new NotImplementedException();
         }
 
-        public static int HowManyPeople(string date)
+        public static int HowManyPeople(IEnumerable<string> date)
         {
             throw new NotImplementedException();
+        }
+
+        public static string Echo(IEnumerable<string> line)
+        {
+            return $"Hello {string.Join("", line)}";
+        }
+
+        public static object Invoke(string line)
+        {
+            var tokens = (new System.Text.RegularExpressions.Regex(@"\s+")).Split(line);
+            var arg = tokens.Where((el, i) => i > 0);
+            try
+            {
+                return typeof(ControlServerCore).GetMethod(tokens[0]).Invoke(null, new[] { arg.ToArray() });
+            }catch(Exception ex)
+            {
+                return $"{ex.Message}\n{ex.StackTrace}";
+            }
         }
     }
 }

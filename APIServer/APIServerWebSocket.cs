@@ -98,8 +98,8 @@ namespace APIServerModule
         /// <param name="core"></param>
         private static void InterpretWS<T>(WebSocket ws, string line, T core) where T : IAPIServerCore
         {
-            throw new NotImplementedException();
-            var response = Encoding.UTF8.GetBytes(line);
+            var result = ControlServerCore.Invoke(line);
+            var response = Encoding.UTF8.GetBytes(result.ToString());
             ws.SendAsync(new ArraySegment<byte>(response), WebSocketMessageType.Text, true, System.Threading.CancellationToken.None);
         }
     }
