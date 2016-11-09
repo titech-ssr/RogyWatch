@@ -10,7 +10,7 @@ require 'date'
 
 require 'bundler'
 require 'lib/auth'
-require 'websocket-client-simple'
+require 'lib/bot'
 
 
 ScreenName  = :rogy_watch
