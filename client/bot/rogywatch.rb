@@ -14,46 +14,55 @@ require 'lib/bot'
 
 
 ScreenName  = :rogy_watch
-Admin       = "Mizuho32"
-
 cert = (config = YAML.load_file("config.yaml"))[ScreenName]
+Admin       = config[ScreenName][:admin]
+
 
 rest = authoricate(screen_name:ScreenName, type: :REST, keys:cert)
 stream = authoricate(screen_name:ScreenName, type: :Streaming, keys:cert)
 cert = nil
 
 ws_conf = config[:server][:ws]
-ws = WebSocket::Client::Simple.connect("ws://#{ws_conf[:std][:address]}:#{ws_conf[:std][:port]}")
-
-ws.on :message do |msg|
-  puts msg.data
-end
-
-ws.on :open do
-  #ws.send 'hello!!!'
-end
-
-ws.on :close do |e|
-  p e
-  exit 1
-end
+bot = RogyWatch::Bot.new(ws_conf)
 
 stream.user{|status|
+
   case status
+
     when Twitter::Tweet then
       puts "#{status.user.screen_name}\n#{status.text}"
-      if status.text =~ /@#{ScreenName}/ && status.user.screen_name == Admin then
-        c = status.text.gsub(/@#{ScreenName}/, "").strip
+      content = status.text.gsub(/@#{ScreenName}/, "").strip
+
+      if (reply = status.text =~ /@#{ScreenName}/) && status.user.id == Admin then
         Thread.new{
           begin
-            p result = eval(c)
-            rest.update("@#{status.user.screen_name} #{result}\n#{DateTime.now.to_s}", in_reply_to_status: status)
+            p result = eval(content)
+            rest.update(
+              "@#{status.user.screen_name} #{result}\n#{DateTime.now.to_s}", 
+              in_reply_to_status: status)
           rescue => e
-            puts e
+            rest.update(
+              "@#{status.user.screen_name} #{e.message}\n#{DateTime.now.to_s}", 
+              in_reply_to_status: status) rescue puts("#{$!.message}\n#{$!.backtrace}")
+          end
+        }
+      elsif reply
+        Thread.new{
+          begin
+            bot.connect
+            bot.send("HowManyPeople #{DateTime.now}")
+            p count = bot.read(ws_conf[:timeout]).data
+            bot.close
+          rescue => e
+            rest.update(
+              "@#{status.user.screen_name} #{e.message}\n#{DateTime.now.to_s}", 
+              in_reply_to_status: status) rescue puts("#{$!.message}\n#{$!.backtrace}")
           end
         }
       end
+
     when Twitter::Streaming::Event then
 
   end
+
 }

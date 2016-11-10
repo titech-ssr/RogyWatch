@@ -4,3 +4,5 @@ source "https://rubygems.org"
 
  gem "twitter"
  gem "websocket-client-simple"
+ gem "em-websocket"
+ gem "byebug"
