@@ -16,6 +16,8 @@ namespace APIServerModule
         T Get<T>(string command);
         object GetDepth(KinectVersion v);
         int HowManyPeople(string date);
+
+        object Invoke<T>(string line);
     }
 
     public partial class APIServerCore : IAPIServerCore
@@ -37,23 +39,13 @@ namespace APIServerModule
         {
             throw new NotImplementedException();
         }
-    }
 
-    public static class ControlServerCore
-    {
-        public static string kill(string line)
+       public object Invoke<T>(string line)
         {
-            throw new NotImplementedException();
-        }
-
-        public static string Eval(string code)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static int HowManyPeople(string date)
-        {
-            throw new NotImplementedException();
+            var tokens = (new System.Text.RegularExpressions.Regex(@"\s+")).Split(line);
+            var arg = tokens.Where((el, i) => i > 0);
+            return GetType().GetMethod(tokens[0], new[] { typeof(T) }).Invoke(this, new[] { arg.ToArray() });
         }
     }
+
 }

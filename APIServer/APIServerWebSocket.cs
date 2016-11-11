@@ -9,9 +9,9 @@ using System.Net.Sockets;
 
 namespace APIServerModule
 {
-    public partial class APIServerExterior  //  WeebSocket
+    public partial class APIServerExterior  //  WebSocket
     {
-        private static HttpListener _httpListener;
+        private static HttpListener _httpListener, _errHttplistener;
         private static bool _wsRunnning;
         private static List<WebSocket> _wsclients = new List<WebSocket>();
 
@@ -36,6 +36,10 @@ namespace APIServerModule
                 _httpListener = new HttpListener();
                 _httpListener.Prefixes.Add("http://*:8000/");
                 _httpListener.Start();
+
+                _errHttplistener = new HttpListener();
+                _errHttplistener.Prefixes.Add("http://*:8500/");
+                _errHttplistener.Start();
 
                 while (_wsRunnning)
                 {
@@ -63,6 +67,28 @@ namespace APIServerModule
             var ws = (await lisCon.AcceptWebSocketAsync(subProtocol: null)).WebSocket;
             _wsclients.Add(ws);
 
+
+            WebSocket ws_err = null;
+
+            var errContext = _errHttplistener.GetContextAsync();
+            if (errContext.Wait(TimeSpan.FromSeconds(20)))
+            {
+                if (errContext.Result.Request.IsWebSocketRequest)
+                {
+                    ws_err = (await errContext.Result.AcceptWebSocketAsync(subProtocol: null)).WebSocket;
+                }
+                else
+                {
+                    errContext.Result.Response.StatusCode = 400;
+                    errContext.Result.Response.Close();
+                }
+            }
+            else
+            {
+
+            }
+
+
             var buff = new ArraySegment<byte>(new byte[512]);
             while (ws.State == WebSocketState.Open)
             {
@@ -74,7 +100,7 @@ namespace APIServerModule
                     if (ret.MessageType == WebSocketMessageType.Text)
                     {
                         Console.WriteLine($"{DateTime.Now} String Received from {lisCon.Request.RemoteEndPoint.Address}\n{line}");
-                        InterpretWS(ws, line, core);
+                        InterpretWS(ws, ws_err, line, core);
                     }else if (ret.MessageType == WebSocketMessageType.Close) {
                         Console.WriteLine($"{DateTime.Now} Session Close {lisCon.Request.RemoteEndPoint.Address}");
                     }
@@ -96,11 +122,21 @@ namespace APIServerModule
         /// <param name="ws"></param>
         /// <param name="line"></param>
         /// <param name="core"></param>
-        private static void InterpretWS<T>(WebSocket ws, string line, T core) where T : IAPIServerCore
+        private static void InterpretWS<T>(WebSocket ws, WebSocket ws_err, string line, T core) where T : IAPIServerCore
         {
-            throw new NotImplementedException();
-            var response = Encoding.UTF8.GetBytes(line);
-            ws.SendAsync(new ArraySegment<byte>(response), WebSocketMessageType.Text, true, System.Threading.CancellationToken.None);
+            try
+            {
+                var result = core.Invoke<IEnumerable<string>>(line);
+                var response = Encoding.UTF8.GetBytes(result.ToString());
+                ws.SendAsync(new ArraySegment<byte>(response), WebSocketMessageType.Text, true, System.Threading.CancellationToken.None);
+            }catch(Exception ex)
+            {
+                (ws_err??ws).SendAsync(
+                    new ArraySegment<byte>(Encoding.UTF8.GetBytes($"{ex.Message}\n{ex.StackTrace}")), 
+                    WebSocketMessageType.Text, 
+                    true, 
+                    System.Threading.CancellationToken.None);
+            }
         }
     }
 }
