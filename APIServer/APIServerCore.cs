@@ -51,9 +51,15 @@ namespace APIServerModule
             throw new NotImplementedException();
         }
 
-        public static int HowManyPeople(IEnumerable<string> date)
+        public static string HowManyPeople(IEnumerable<string> date)
         {
-            throw new NotImplementedException();
+            var depth1 = PrimitiveServer.GetDepth<short[]>(KinectVersion.V1);
+            var depth2 = PrimitiveServer.GetDepth<ushort[]>(KinectVersion.V2);
+
+            var count1 = Attei.Attei.PersonCounter(date.First(), KinectVersion.V1, depth1);
+            var count2 = Attei.Attei.PersonCounter(date.First(), KinectVersion.V2, depth2);
+
+            return $"{count1} {count2}";
         }
 
         public static string Echo(IEnumerable<string> line)
@@ -65,13 +71,7 @@ namespace APIServerModule
         {
             var tokens = (new System.Text.RegularExpressions.Regex(@"\s+")).Split(line);
             var arg = tokens.Where((el, i) => i > 0);
-            try
-            {
-                return typeof(ControlServerCore).GetMethod(tokens[0]).Invoke(null, new[] { arg.ToArray() });
-            }catch(Exception ex)
-            {
-                return $"{ex.Message}\n{ex.StackTrace}";
-            }
+            return typeof(ControlServerCore).GetMethod(tokens[0]).Invoke(null, new[] { arg.ToArray() });
         }
     }
 }
