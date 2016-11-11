@@ -21,16 +21,6 @@ namespace RogyWatchCommon
         public T Z;
     }
 
-    public static class Defaults
-    {
-        public static Dictionary<KinectVersion, Point<ushort>> DepthResolution
-            = new Dictionary<KinectVersion, Point<ushort>>()
-                {
-                    { KinectVersion.V1, new Point<ushort>{ X = 640, Y = 480} },
-                    { KinectVersion.V2, new Point<ushort>{ X = 512, Y = 424} }
-                };
-    }
-
     /// <summary>
     /// Holds unique Server class &lt; - &gt; instance map. So, any server class must have only one instance.
     /// </summary>

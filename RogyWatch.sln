@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APIServerModule", "APIServe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APIServerTest", "APIServerTest\APIServerTest.csproj", "{FA1EE9AC-CC4C-4E40-A0FD-FD57B5020E53}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RogyWatchTest", "RogyWatchTest\RogyWatchTest.csproj", "{49E6C985-363E-4F10-BEDA-3A44A5AE4BC0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{FA1EE9AC-CC4C-4E40-A0FD-FD57B5020E53}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA1EE9AC-CC4C-4E40-A0FD-FD57B5020E53}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA1EE9AC-CC4C-4E40-A0FD-FD57B5020E53}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49E6C985-363E-4F10-BEDA-3A44A5AE4BC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49E6C985-363E-4F10-BEDA-3A44A5AE4BC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49E6C985-363E-4F10-BEDA-3A44A5AE4BC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49E6C985-363E-4F10-BEDA-3A44A5AE4BC0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

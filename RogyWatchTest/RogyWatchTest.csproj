@@ -3,11 +3,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{FA1EE9AC-CC4C-4E40-A0FD-FD57B5020E53}</ProjectGuid>
+    <ProjectGuid>{49E6C985-363E-4F10-BEDA-3A44A5AE4BC0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>APIServerTest</RootNamespace>
-    <AssemblyName>APIServerTest</AssemblyName>
+    <RootNamespace>RogyWatchTest</RootNamespace>
+    <AssemblyName>RogyWatchTest</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -35,6 +35,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
   </ItemGroup>
   <Choose>
@@ -45,25 +49,25 @@
     </When>
     <Otherwise>
       <ItemGroup>
-        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework">
-          <Private>False</Private>
-        </Reference>
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
       </ItemGroup>
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="APIServerTest.cs" />
+    <Compile Include="ConfigTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WSServerTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\APIServer\APIServerModule.csproj">
-      <Project>{26d4bbfd-3a5d-4f10-a732-7fc5e9a6eb47}</Project>
-      <Name>APIServerModule</Name>
-    </ProjectReference>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\PrimitiveDriverInterfaces\RogyWatchCommon.csproj">
       <Project>{003ca6c8-9c33-4dad-9c2e-8f597b12f197}</Project>
       <Name>RogyWatchCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RogyWatch\RogyWatch.csproj">
+      <Project>{2ce6c84b-43dd-4e45-a6db-907174880821}</Project>
+      <Name>RogyWatch</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>
