@@ -58,7 +58,7 @@ module RogyWatch
       frame = ::WebSocket::Frame::Incoming::Client.new
       threads = {}
 
-      Timeout.timeout(timeout) {
+      return Timeout.timeout(timeout) {
 
         threads[:std] = Thread.new do
           result =  catch(:return){
@@ -95,13 +95,14 @@ module RogyWatch
         #threads.each{|k,n| n.kill}
         #p threads.map{|k,n| n.value}
 
-        threads.select{|k,v| v&.value}.map do |k,v|
+        ret = threads.select{|k,v| v&.value}.map do |k,v|
           if WebSocket::Frame::Incoming::Client === (val = v&.value)
             val
           else
             raise val
           end
         end.first
+        ret
       }
     end
 

@@ -25,15 +25,19 @@ cert = nil
 ws_conf = config[:server][:ws]
 bot = RogyWatch::Bot.new(ws_conf)
 
-#=begin
+=begin
 loop{
-  bot.connect
+bot.connect
+begin
   bot.send("#{gets.chomp}")
   p result = bot.read(ws_conf[:readtimeout]).data
-  bot.close
+rescue Exception => e
+  puts e.message, e.backtrace
+end
+bot.close
 }
 exit 
-#=end
+=end
 
 stream.user{|status|
 
@@ -44,30 +48,36 @@ stream.user{|status|
       content = status.text.gsub(/@#{ScreenName}/, "").strip
 
       if (reply = status.text =~ /@#{ScreenName}/) && status.user.id == Admin then
+        now = "#{(d = DateTime.now).year}_#{d.month}_#{d.day}_#{d.hour}_#{d.second}"
         Thread.new{
           begin
             p result = eval(content)
-            rest.update(
-              "@#{status.user.screen_name} #{result}\n#{DateTime.now.to_s}", 
-              in_reply_to_status: status)
+            rest.update("@#{status.user.screen_name} #{result}\n#{d.to_s}", in_reply_to_status: status)
           rescue => e
             rest.update(
-              "@#{status.user.screen_name} #{e.message}\n#{DateTime.now.to_s}", 
+              "@#{status.user.screen_name} #{e.message}\n#{d.to_s}", 
               in_reply_to_status: status) rescue puts("#{$!.message}\n#{$!.backtrace}")
           end
         }
       elsif reply
+        now = "#{(d = DateTime.now).year}_#{d.month}_#{d.day}_#{d.hour}_#{d.second}"
         Thread.new{
+          bot.connect
           begin
-            bot.connect
-            bot.send("HowManyPeople #{DateTime.now}")
-            p count = bot.read(ws_conf[:timeout]).data
-            bot.close
-          rescue => e
-            rest.update(
-              "@#{status.user.screen_name} #{e.message}\n#{DateTime.now.to_s}", 
-              in_reply_to_status: status) rescue puts("#{$!.message}\n#{$!.backtrace}")
+            if    content =~ /how/i then bot.send("HowManyPeople #{now}")
+            elsif content =~ /echo/i then bot.send("Echo #{now}")
+            elsif content.size < 100 then bot.send(content)
+            else
+              rest.update("@#{status.user.screen_name} you said #{content}\n#{d.to_s}", in_reply_to_status: status)
+              next
+            end
+            p result = bot.read(ws_conf[:timeout]).data
+            rest.update("@#{status.user.screen_name} #{result}\n#{d.to_s}", in_reply_to_status: status)
+          rescue Exception => e
+            rest.update("@#{status.user.screen_name} #{e.message}\n#{d.to_s}"[0, 140], 
+              in_reply_to_status: status) #rescue puts("#{$!.message}\n#{$!.backtrace}")
           end
+          bot.close
         }
       end
 
