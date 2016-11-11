@@ -71,7 +71,7 @@ namespace APIServerTest
         [TestMethod]
         public void ControlServerCore_Test()
         {
-            var control = new APIServerCore();
+            var control = new APIServerCoreTest();
             Assert.AreEqual(control.Echo(new [] { "1", "2" }), "Hello 12");
             Assert.AreEqual(control.Invoke<IEnumerable<string>>("Echo 1 2").ToString(), "Hello 12");
         }

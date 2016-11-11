@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Text;
 using System.Threading;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace APIServerTest
 {
@@ -30,6 +31,11 @@ namespace APIServerTest
 
         public string Test(string i) { return i; }
         public ushort[] Ushort() { return new ushort[] { 1, 2, 3, 4 }; }
+
+        public string Echo(IEnumerable<string> line)
+        {
+            return $"Hello {string.Join("", line)}";
+        }
 
         public object Invoke<T>(string line)
         {

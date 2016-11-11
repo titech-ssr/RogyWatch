@@ -38,8 +38,9 @@ namespace Attei.PCL
 
         static V2()
         {
-            DEPTH_X = Defaults.DepthResolution[KinectVersion.V2].X;
-            DEPTH_Y = Defaults.DepthResolution[KinectVersion.V2].Y;
+            var conf = new RogyWatchCommon.Config.PrimitiveDriverV2();
+            DEPTH_X = conf.DEPTH_X;
+            DEPTH_Y = conf.DEPTH_Y;
             init();
         }
 

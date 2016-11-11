@@ -69,13 +69,14 @@ namespace PrimitivesTest
         {
             var depth1 = PrimitiveServerModule.PrimitiveServer.GetDepth<short[]>(KinectVersion.V1);
             var depth2 = PrimitiveServerModule.PrimitiveServer.GetDepth<ushort[]>(KinectVersion.V2);
+            var defult = new RogyWatchCommon.Config.Config();
 
             Assert.AreEqual(
-                Defaults.DepthResolution[KinectVersion.V1].X*Defaults.DepthResolution[KinectVersion.V1].Y
+                defult.PrimitiveDriverV1.DEPTH_X*defult.PrimitiveDriverV1.DEPTH_Y
                 , depth1.Length);
 
             Assert.AreEqual(
-                Defaults.DepthResolution[KinectVersion.V2].X*Defaults.DepthResolution[KinectVersion.V2].Y
+                defult.PrimitiveDriverV2.DEPTH_X*defult.PrimitiveDriverV2.DEPTH_Y
                 , depth2.Length);
         }
     }

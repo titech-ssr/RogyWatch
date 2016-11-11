@@ -39,12 +39,5 @@ namespace APIServerModule
         {
             return $"Hello {line}";
         }
-
-        public object Invoke<T>(string line)
-        {
-            var tokens = (new System.Text.RegularExpressions.Regex(@"\s+")).Split(line);
-            var arg = tokens.Where((el, i) => i > 0);
-            return GetType().GetMethod(tokens[0], new[] { typeof(T) }).Invoke(this, new[] { arg.ToArray() });
-        }
     }
 }
