@@ -25,6 +25,16 @@ cert = nil
 ws_conf = config[:server][:ws]
 bot = RogyWatch::Bot.new(ws_conf)
 
+#=begin
+loop{
+  bot.connect
+  bot.send("#{gets.chomp}")
+  p result = bot.read(ws_conf[:readtimeout]).data
+  bot.close
+}
+exit 
+#=end
+
 stream.user{|status|
 
   case status

@@ -71,6 +71,7 @@ module RogyWatch
             end
           }
           threads[:err]&.kill
+          puts "std!", threads[:err]&.status.inspect, "#{result}\n"
           result
         end
 
@@ -85,14 +86,17 @@ module RogyWatch
             end
           }
           threads[:std]&.kill
+          $stderr.puts "std err!", "#{result}\n"
           Exception.new(result)
         end
 
         threads[:std].join
-        threads.each{|k,n| n.kill}
+        #sleep 0.5
+        #threads.each{|k,n| n.kill}
+        #p threads.map{|k,n| n.value}
 
-        threads.select{|k,v| v.value}.map do |k,v|
-          if WebSocket::Frame::Incoming::Client === (val = v.value)
+        threads.select{|k,v| v&.value}.map do |k,v|
+          if WebSocket::Frame::Incoming::Client === (val = v&.value)
             val
           else
             raise val
