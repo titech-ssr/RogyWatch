@@ -62,7 +62,7 @@ namespace APIServerTest
         [TestMethod]
         public void WebSocketServer_Test()
         {
-            var core = new APIServerCoreTest();
+            var core = new APIServerCore();
             APIServerExterior.StartWebSocket(core);
             Console.ReadLine();
             APIServerExterior.CloseWebSocket();
@@ -71,8 +71,9 @@ namespace APIServerTest
         [TestMethod]
         public void ControlServerCore_Test()
         {
-            Assert.AreEqual(ControlServerCore.Echo(new [] { "1", "2" }), "Hello 12");
-            Assert.AreEqual(ControlServerCore.Invoke("Echo 1 2").ToString(), "Hello 12");
+            var control = new APIServerCore();
+            Assert.AreEqual(control.Echo(new [] { "1", "2" }), "Hello 12");
+            Assert.AreEqual(control.Invoke<IEnumerable<string>>("Echo 1 2").ToString(), "Hello 12");
         }
     }
 }

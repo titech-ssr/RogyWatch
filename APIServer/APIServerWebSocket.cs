@@ -9,7 +9,7 @@ using System.Net.Sockets;
 
 namespace APIServerModule
 {
-    public partial class APIServerExterior  //  WeebSocket
+    public partial class APIServerExterior  //  WebSocket
     {
         private static HttpListener _httpListener, _errHttplistener;
         private static bool _wsRunnning;
@@ -126,7 +126,7 @@ namespace APIServerModule
         {
             try
             {
-                var result = ControlServerCore.Invoke(line);
+                var result = core.Invoke<IEnumerable<string>>(line);
                 var response = Encoding.UTF8.GetBytes(result.ToString());
                 ws.SendAsync(new ArraySegment<byte>(response), WebSocketMessageType.Text, true, System.Threading.CancellationToken.None);
             }catch(Exception ex)

@@ -16,6 +16,8 @@ namespace APIServerModule
         T Get<T>(string command);
         object GetDepth(KinectVersion v);
         int HowManyPeople(string date);
+
+        object Invoke<T>(string line);
     }
 
     public partial class APIServerCore : IAPIServerCore
@@ -39,39 +41,4 @@ namespace APIServerModule
         }
     }
 
-    public static class ControlServerCore
-    {
-        public static string kill(IEnumerable<string> line)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static string Eval(IEnumerable<string> code)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static string HowManyPeople(IEnumerable<string> date)
-        {
-            var depth1 = PrimitiveServer.GetDepth<short[]>(KinectVersion.V1);
-            var depth2 = PrimitiveServer.GetDepth<ushort[]>(KinectVersion.V2);
-
-            var count1 = Attei.Attei.PersonCounter(date.First(), KinectVersion.V1, depth1);
-            var count2 = Attei.Attei.PersonCounter(date.First(), KinectVersion.V2, depth2);
-
-            return $"{count1} {count2}";
-        }
-
-        public static string Echo(IEnumerable<string> line)
-        {
-            return $"Hello {string.Join("", line)}";
-        }
-
-        public static object Invoke(string line)
-        {
-            var tokens = (new System.Text.RegularExpressions.Regex(@"\s+")).Split(line);
-            var arg = tokens.Where((el, i) => i > 0);
-            return typeof(ControlServerCore).GetMethod(tokens[0]).Invoke(null, new[] { arg.ToArray() });
-        }
-    }
 }

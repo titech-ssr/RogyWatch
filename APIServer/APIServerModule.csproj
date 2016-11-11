@@ -44,6 +44,7 @@
     <Compile Include="APIServerCore.cs" />
     <Compile Include="APIServerEx.cs" />
     <Compile Include="APIServerWebSocket.cs" />
+    <Compile Include="AtteiAPIServerCore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
