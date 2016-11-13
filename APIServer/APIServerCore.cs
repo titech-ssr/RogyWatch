@@ -18,6 +18,7 @@ namespace APIServerModule
         int HowManyPeople(string date);
 
         object Invoke<T>(string line);
+        Config Config { get; set; }
     }
 
     public partial class APIServerCore : IAPIServerCore
@@ -40,12 +41,14 @@ namespace APIServerModule
             throw new NotImplementedException();
         }
 
-       public object Invoke<T>(string line)
+        public object Invoke<T>(string line)
         {
             var tokens = (new System.Text.RegularExpressions.Regex(@"\s+")).Split(line);
             var arg = tokens.Where((el, i) => i > 0);
             return GetType().GetMethod(tokens[0], new[] { typeof(T) }).Invoke(this, new[] { arg.ToArray() });
         }
+
+        public Config Config { get; set; }
     }
 
 }

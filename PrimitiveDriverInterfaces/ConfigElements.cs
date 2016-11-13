@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel;
 
-namespace RogyWatchCommon.Config
+namespace RogyWatchCommon
 {
     public interface IServer{
         string Host { get; set; }
@@ -39,6 +39,8 @@ namespace RogyWatchCommon.Config
         public string Host { get; set; } = "*";
         [DefaultValue(8500)]
         public ushort Port { get; set; } = 8500;
+        [DefaultValue(5)]
+        public ushort ConnectionTimeout { get; set; } = 5;
     }
 
     public interface IPrimitiveDriver{
@@ -68,5 +70,4 @@ namespace RogyWatchCommon.Config
         [DefaultValue(424)]
         public ushort DEPTH_Y { get; set; } = 424;
     }
-
 }

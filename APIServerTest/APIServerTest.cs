@@ -43,6 +43,8 @@ namespace APIServerTest
             var arg = tokens.Where((el, i) => i > 0);
             return GetType().GetMethod(tokens[0], new[] { typeof(T) }).Invoke(this, new[] { arg.ToArray() });
         }
+
+        public Config Config { get; set; }
     }
 
     [TestClass]
@@ -51,7 +53,7 @@ namespace APIServerTest
         [TestMethod]
         public void PipeServer_Test()
         {
-            var core = new APIServerCoreTest();
+            var core = new APIServerCoreTest() { Config = new Config() };
             APIServerExterior.StartPipeServer(core);
             Thread.Sleep(500);
 
@@ -117,7 +119,8 @@ namespace APIServerTest
         public void UDPServer_API_Test()
         {
             var core = new APIServerCoreTest();
-            APIServerExterior.StartUDPServer(core);
+            var config = new Config();
+            APIServerExterior.StartUDPServer(core, config);
 
             var _udp = new UdpClient(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 4500));
 

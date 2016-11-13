@@ -61,13 +61,13 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\APIServer\APIServerModule.csproj">
+      <Project>{26d4bbfd-3a5d-4f10-a732-7fc5e9a6eb47}</Project>
+      <Name>APIServerModule</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PrimitiveDriverInterfaces\RogyWatchCommon.csproj">
       <Project>{003ca6c8-9c33-4dad-9c2e-8f597b12f197}</Project>
       <Name>RogyWatchCommon</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PrimitiveServer\PrimitiveServerModule.csproj">
-      <Project>{f9ca2061-54d0-4234-9a74-d80e96035420}</Project>
-      <Name>PrimitiveServerModule</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -26,10 +26,10 @@ namespace APIServerModule
         {
         }
 
-        public static void StartPipeServer<T>(T core) where T : IAPIServerCore
+        public static Task StartPipeServer<T>(T core) where T : IAPIServerCore
         {
             _pipeRunnning = true;
-            Task.Factory.StartNew(()=>PipeServer(core));
+            return Task.Factory.StartNew(()=>PipeServer(core));
         }
 
         public static void ClosePipeSever()
@@ -46,9 +46,9 @@ namespace APIServerModule
             }
         }
 
-        private static void PipeStart()
+        private static void PipeStart(Config config)
         {
-            _pipe = new NamedPipeServerStream("Kinect", PipeDirection.InOut, 1, PipeTransmissionMode.Byte, PipeOptions.Asynchronous);
+            _pipe = new NamedPipeServerStream(config.NamedPipe.Host, PipeDirection.InOut, 1, PipeTransmissionMode.Byte, PipeOptions.Asynchronous);
             _pipe.WaitForConnection();
             _reader = new StreamReader(_pipe);
             _writer = new StreamWriter(_pipe);
@@ -68,7 +68,7 @@ namespace APIServerModule
 
         private static void PipeServer<T>(T core) where T : IAPIServerCore
         {
-            PipeStart();
+            PipeStart(core.Config);
             while (_pipeRunnning)
             {
                 try
@@ -87,7 +87,7 @@ namespace APIServerModule
 
                     // エラー処理
                     _pipe.Close();
-                    PipeStart();
+                    PipeStart(core.Config);
                     continue;
                 }
             }
@@ -101,10 +101,10 @@ namespace APIServerModule
         private static IPEndPoint _remote = null;
         private static bool _udpRunning;
 
-        public static void StartUDPServer<T>(T core) where T : IAPIServerCore
+        public static Task StartUDPServer<T>(T core, Config config) where T : IAPIServerCore
         {
             _udpRunning = true;
-            Task.Factory.StartNew(()=>UDPServer(core));
+            return Task.Factory.StartNew(()=>UDPServer(core, config));
         }
 
         public static void CloseUDPServer()
@@ -114,9 +114,9 @@ namespace APIServerModule
             _client.Close();
         }
 
-        private static void UDPServer<T>(T core) where T : IAPIServerCore
+        private static void UDPServer<T>(T core, Config config) where T : IAPIServerCore
         {
-            _udp = new UdpClient(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 4000));
+            _udp = new UdpClient(new IPEndPoint(IPAddress.Parse(config.UDP.Host), config.UDP.Port));
             _client = new UdpClient(4000);
 
             while (_udpRunning)
@@ -135,111 +135,6 @@ namespace APIServerModule
                 _client.Send(result, result.Length);
             }catch(Exception ex) {
                 Console.WriteLine($"{ex.Message}\n{ex.StackTrace}");
-            }
-        }
-    }
-
-    static partial class APIServerExterior  // Common
-    {
-        public static void StartAPIServer<T>(T core) where T : IAPIServerCore
-        {
-            StartUDPServer(core);
-            StartPipeServer(core);
-        }
-
-        // Result ex.            
-        //                        +------- Interpret Succeeded? ( 0:false, 1:true)
-        // data[0]                |+------+-- specify size of "data size" as byte unit  +------------------------- Data
-        // 0b0000 0000          0b1000 0010         0b0000 0001     0b0000 0000         0b0000 0000     0b0010 1100 .....
-        //   |+------+---- API                      +-------------------------+-- specify data size as byte unit
-        //   +------------ Kinect Version. 1 => V1, 0 => V2
-        // Response to GetDepth of KinectV2, Interpret Succeeded and size of "data size" is 2 bytes(Uint16) and data size is 256 bytes
-        // i.e, Got 256 bytes of Depth Data from KinectV2.
-        private static byte[] Interpret<T>(byte[] data,T core) where T : IAPIServerCore
-        {
-            var d = data[0];
-            var ver = (KinectVersion)(d & 0x80 );
-            var api = (API)(d & 0x7F);
-
-            try
-            {
-                switch (api)
-                {
-                    case API.GetDepth:
-                        var depth = (Array)core.GetDepth(ver);
-                        if (depth == null) throw new NullReferenceException("Depth data null");
-
-                        var depthByte = new byte[depth.Length*2];
-                        for(var i = 0; i < depth.Length; i++)
-                        {
-                            var byts = ver == KinectVersion.V1 ?
-                                BitConverter.GetBytes((short)depth.GetValue(i)) :
-                                BitConverter.GetBytes((ushort)depth.GetValue(i));
-                            depthByte[i * 2] = byts[0];
-                            depthByte[i * 2 + 1] = byts[1];
-                        }
-                        return GenerateResult((byte)((int)api | (byte)ver), Status.Succeeded, depthByte);
-                    case API.RunMethod:
-                        //return ParseLine(Encoding.UTF8.GetString(data, 1, data.Length-1), core);
-                        throw new NotImplementedException();
-                    default:
-                        throw new ArgumentException("API Not defined");
-                }
-            }catch(Exception ex)
-            {
-                var mesg = Encoding.UTF8.GetBytes(ex.Message);
-                return GenerateResult((byte)((int)ver | (byte)api), Status.Failed, mesg);
-            }
-        }
-
-        /// <summary>
-        /// Generate result bytes from KinectVersion, api, status, data bytes
-        /// </summary>
-        /// <param name="head"></param>
-        /// <param name="status"></param>
-        /// <param name="data"></param>
-        /// <returns></returns>
-        public static byte[] GenerateResult(byte head, Status status, byte[] data)
-        {
-            var req = RequiredSizeofDataSize(data.Length);
-            var result = new byte[2 + req + data.Length];
-            result[0] = head;
-            result[1] = (byte)((int)status | req);
-            var datasize = BitConverter.GetBytes(data.Length);
-            var i = 0;
-            for (i = 0; i < req; i++)
-                result[2 + i] = datasize[i];
-            for (var i2 = 0; i2 < data.Length; i2++)
-                result[2 + i + i2] = data[i2];
-
-            return result;
-        }
-
-        /// <summary>
-        /// calculate size [bytes] of "data size" area from actual data size
-        /// </summary>
-        /// <returns></returns>
-        public static byte RequiredSizeofDataSize(int dsize)
-        {
-            byte i;
-            for (i = 0; (dsize >> i) != 0; i++) ;
-            return (byte)(i / 8 + (i % 8 > 0 ? 1 : 0));
-        }
-
-        /// <summary>
-        /// parse command to server. Nullable return.
-        /// </summary>
-        /// <param name="line"></param>
-        /// <returns></returns>
-        private static object ParseLine<T>(string line, T core) where T : IAPIServerCore
-        {
-            try
-            {
-                return typeof(T).GetMethod(line)?.Invoke(core, new[] { line });
-            }catch(Exception ex)
-            {
-                Console.WriteLine($"{ex.Message}\n{ex.StackTrace}");
-                return null;
             }
         }
     }

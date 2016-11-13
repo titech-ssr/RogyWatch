@@ -43,6 +43,7 @@
     <Compile Include="APIs.cs" />
     <Compile Include="APIServerCore.cs" />
     <Compile Include="APIServerEx.cs" />
+    <Compile Include="APIServerExCommon.cs" />
     <Compile Include="APIServerWebSocket.cs" />
     <Compile Include="AtteiAPIServerCore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

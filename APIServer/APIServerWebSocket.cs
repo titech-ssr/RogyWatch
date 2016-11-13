@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Net.WebSockets;
 using System.Net;
 using System.Net.Sockets;
+using RogyWatchCommon;
 
 namespace APIServerModule
 {
@@ -15,10 +16,10 @@ namespace APIServerModule
         private static bool _wsRunnning;
         private static List<WebSocket> _wsclients = new List<WebSocket>();
 
-        public static void StartWebSocket<T>(T core) where T : IAPIServerCore
+        public static Task StartWebSocketServer<T>(T core) where T : IAPIServerCore
         {
             _wsRunnning = true;
-            Task.Run(()=>WSServer(core));
+            return Task.Run(()=>WSServer(core));
         }
 
         public static void CloseWebSocket()
@@ -34,11 +35,11 @@ namespace APIServerModule
             try
             {
                 _httpListener = new HttpListener();
-                _httpListener.Prefixes.Add("http://*:8000/");
+                _httpListener.Prefixes.Add($"http://{core.Config.WebSocketSTD.Host}:{core.Config.WebSocketSTD.Port}/");
                 _httpListener.Start();
 
                 _errHttplistener = new HttpListener();
-                _errHttplistener.Prefixes.Add("http://*:8500/");
+                _errHttplistener.Prefixes.Add($"http://{core.Config.WebSocketSTDERR.Host}:{core.Config.WebSocketSTDERR.Port}/");
                 _errHttplistener.Start();
 
                 while (_wsRunnning)
@@ -46,7 +47,22 @@ namespace APIServerModule
                     var listenerContext = _httpListener.GetContext();
                     if (listenerContext.Request.IsWebSocketRequest)
                     {
-                        Task.Run(() => OnReceiveWS(listenerContext, core));
+                        WebSocket ws_err = null;
+                        var errContext = _errHttplistener.GetContextAsync();
+                        var ws = listenerContext.AcceptWebSocketAsync(subProtocol: null).Result.WebSocket;
+                        if (errContext.Wait(TimeSpan.FromSeconds(core.Config.WebSocketSTDERR.ConnectionTimeout)))
+                        {
+                            if (errContext.Result.Request.IsWebSocketRequest)
+                            {
+                                ws_err = (errContext.Result.AcceptWebSocketAsync(subProtocol: null)).Result.WebSocket;
+                            }
+                            else
+                            {
+                                errContext.Result.Response.StatusCode = 400;
+                                errContext.Result.Response.Close();
+                            }
+                        }
+                        Task.Run(() => OnReceiveWS(listenerContext, ws, ws_err, core));
                     }
                     else
                     {
@@ -57,36 +73,18 @@ namespace APIServerModule
             }
             catch(Exception ex)
             {
-
+                Console.WriteLine($"{ex.Message}\n{ex.StackTrace}");
             }
         }
 
-        private static async void OnReceiveWS<T>(HttpListenerContext lisCon, T core) where T : IAPIServerCore
+        private static async void OnReceiveWS<T>(HttpListenerContext lisCon, WebSocket ws, WebSocket ws_err, T core) where T : IAPIServerCore
         {
             Console.WriteLine($"{DateTime.Now}: new session {lisCon.Request.RemoteEndPoint.Address}");
-            var ws = (await lisCon.AcceptWebSocketAsync(subProtocol: null)).WebSocket;
+            //var ws = (await lisCon.AcceptWebSocketAsync(subProtocol: null)).WebSocket;
             _wsclients.Add(ws);
 
 
-            WebSocket ws_err = null;
-
-            var errContext = _errHttplistener.GetContextAsync();
-            if (errContext.Wait(TimeSpan.FromSeconds(20)))
-            {
-                if (errContext.Result.Request.IsWebSocketRequest)
-                {
-                    ws_err = (await errContext.Result.AcceptWebSocketAsync(subProtocol: null)).WebSocket;
-                }
-                else
-                {
-                    errContext.Result.Response.StatusCode = 400;
-                    errContext.Result.Response.Close();
-                }
-            }
-            else
-            {
-
-            }
+            //WebSocket ws_err = null;
 
 
             var buff = new ArraySegment<byte>(new byte[512]);
@@ -107,6 +105,7 @@ namespace APIServerModule
                 }catch(Exception ex)
                 {
                     Console.WriteLine($"{DateTime.Now} session abort {lisCon.Request.RemoteEndPoint.Address}");
+                    Console.WriteLine($"{ex.Message}\n{ex.StackTrace}");
                     break;
                 }
             }

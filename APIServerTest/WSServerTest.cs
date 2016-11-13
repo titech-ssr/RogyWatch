@@ -3,6 +3,7 @@ using System.Text;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using APIServerModule;
+using RogyWatchCommon;
 
 namespace APIServerTest
 {
@@ -62,8 +63,8 @@ namespace APIServerTest
         [TestMethod]
         public void WebSocketServer_Test()
         {
-            var core = new APIServerCore();
-            APIServerExterior.StartWebSocket(core);
+            var core = new APIServerCore() { Config = new Config() };
+            APIServerExterior.StartWebSocketServer(core);
             Console.ReadLine();
             APIServerExterior.CloseWebSocket();
         }
