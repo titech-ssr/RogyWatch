@@ -40,7 +40,7 @@ exit
 =end
 
 def test(rest, status, config,  a)
-rogy_watch(rest, status, 0, 0, "test", config[ScreenName][:media_dirs])
+  rogy_watch(rest, status, 0, 0, "test", config[ScreenName][:media_dirs], type: :jpg)
 end
 
 stream.user{|status|
@@ -61,6 +61,7 @@ stream.user{|status|
             rest.update(
               "@#{status.user.screen_name} #{e.message}\n#{d.to_s}", 
               in_reply_to_status: status) rescue puts("#{$!.message}\n#{$!.backtrace}")
+              puts e.message,e.backtrace
           end
         }
       elsif reply
@@ -70,6 +71,13 @@ stream.user{|status|
           begin
             if    content =~ /how/i then bot.send("HowManyPeople #{now}")
             elsif content =~ /echo/i then bot.send("Echo #{now}")
+            elsif content =~ /人|多|何/ || content.strip == "" then
+              bot.send("HowManyPeople #{now}")
+              result = bot.read(ws_conf[:timeout]).data.split(/\s+/).map{|n| n.strip}
+              rogy_watch(
+                rest, status, result[0], result[1], now, 
+                config[ScreenName][:media_dirs])
+              next
             elsif content.size < 100 then bot.send(content)
             else
               rest.update("@#{status.user.screen_name} you said #{content}\n#{d.to_s}", in_reply_to_status: status)

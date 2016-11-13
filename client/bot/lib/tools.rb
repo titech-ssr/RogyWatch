@@ -27,7 +27,7 @@ def authoricate(screen_name:nil, type:nil, keys:nil)
 end
 
 
-def upload(files)
+def upload(files, rest)
   media_ids = []
   files.each do |media_filename|
     media_ids << rest.upload(File.new(media_filename))
@@ -37,7 +37,7 @@ end
 
 
 def rogy_watch(rest, status, life_area, work_area, filename, dirs, type: :png)
-  media_ids = upload(dirs.map{|dir| "#{dir}/#{filename}.#{type}"})
+  media_ids = upload(dirs.map{|dir| "#{dir}/#{filename}.#{type}"}, rest)
   tweet = <<-"EOF"
 @#{status.user.screen_name} 
 生活領域人#{life_area}人くらい、
