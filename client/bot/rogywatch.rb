@@ -62,7 +62,7 @@ stream.user{|status|
       elsif reply
         now = "#{(d = DateTime.now).year}_#{d.month}_#{d.day}_#{d.hour}_#{d.second}"
         Thread.new{
-          bot.connect
+          bot.connect(ws_conf[:err][:connection_timeout])
           begin
             if    content =~ /how/i then bot.send("HowManyPeople #{now}")
             elsif content =~ /echo/i then bot.send("Echo #{now}")
@@ -72,10 +72,11 @@ stream.user{|status|
               next
             end
             p result = bot.read(ws_conf[:timeout]).data
-            rest.update("@#{status.user.screen_name} #{result}\n#{d.to_s}", in_reply_to_status: status)
+            rest.update("@#{status.user.screen_name} #{result}\n#{d.to_s}"[0, 140], in_reply_to_status: status)
           rescue Exception => e
             rest.update("@#{status.user.screen_name} #{e.message}\n#{d.to_s}"[0, 140], 
               in_reply_to_status: status) #rescue puts("#{$!.message}\n#{$!.backtrace}")
+            puts "@#{status.user.screen_name} #{e.message}\n#{e.backtrace}"
           end
           bot.close
         }

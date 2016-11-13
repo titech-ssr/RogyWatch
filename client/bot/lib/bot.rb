@@ -10,10 +10,12 @@ module RogyWatch
       @ws_conf = ws_conf
     end
 
-    def connect
+    def connect(err_timeout)
       @std, @std_handshake = handshake(@ws_conf[:std][:address], @ws_conf[:std][:port], ->(){ puts "std Opend" })
       sleep 1
-      @err, @err_handshake = handshake(@ws_conf[:err][:address], @ws_conf[:err][:port], ->(){ puts "err Opend" })
+      Timeout.timeout(err_timeout){
+        @err, @err_handshake = handshake(@ws_conf[:err][:address], @ws_conf[:err][:port], ->(){ puts "err Opend" })
+      } rescue puts "std err connection #{$!}"
 
     end
 
@@ -37,8 +39,9 @@ module RogyWatch
       sleep 0.5
 
       target.write handshake.to_s
-      puts "handshaked sent"
+      puts "handshake sent"
       open.join
+      puts "handshaked!!!"
 
       return target, handshake
     end
@@ -75,20 +78,24 @@ module RogyWatch
           result
         end
 
-        threads[:err] = Thread.new do
-          result =  catch(:return){
-            loop do
-              recv = @err.getc
-              frame << recv
-              while msg = frame.next
-                throw :return, msg.data
+        threads[:err] = Thread.new {
+          if @err.nil? then
+            nil
+          else
+            result =  catch(:return){
+              loop do
+                recv = @err.getc
+                frame << recv
+                while msg = frame.next
+                  throw :return, msg.data
+                end
               end
-            end
-          }
-          threads[:std]&.kill
-          $stderr.puts "std err!", "#{result}\n"
-          Exception.new(result)
-        end
+            }
+            threads[:std]&.kill
+            $stderr.puts "std err!", "#{result}\n"
+            Exception.new(result)
+          end
+        }
 
         threads[:std].join
         #sleep 0.5
