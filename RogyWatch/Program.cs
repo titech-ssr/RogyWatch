@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using PrimitiveServerModule;
 using RogyWatchCommon;
+using APIServerModule;
 
 namespace RogyWatch
 {
@@ -12,7 +12,15 @@ namespace RogyWatch
     {
         static void Main(string[] args)
         {
-            Servers.Set(new PrimitiveServer());
+            try
+            {
+                var config = Config.DeSerialize();
+                var core = new APIServerCore();
+                APIServerExterior.StartAPIServer(core, config);
+            }catch(Exception ex)
+            {
+                Console.WriteLine($"{ex.Message}\n{ex.StackTrace}");
+            }
         }
     }
 }

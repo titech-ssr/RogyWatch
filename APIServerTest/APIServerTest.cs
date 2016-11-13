@@ -52,7 +52,8 @@ namespace APIServerTest
         public void PipeServer_Test()
         {
             var core = new APIServerCoreTest();
-            APIServerExterior.StartPipeServer(core);
+            var config = new Config();
+            APIServerExterior.StartPipeServer(core, config);
             Thread.Sleep(500);
 
             var client = new System.IO.Pipes.NamedPipeClientStream(".", "Kinect", System.IO.Pipes.PipeDirection.InOut, System.IO.Pipes.PipeOptions.Asynchronous);
@@ -117,7 +118,8 @@ namespace APIServerTest
         public void UDPServer_API_Test()
         {
             var core = new APIServerCoreTest();
-            APIServerExterior.StartUDPServer(core);
+            var config = new Config();
+            APIServerExterior.StartUDPServer(core, config);
 
             var _udp = new UdpClient(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 4500));
 

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Net.WebSockets;
 using System.Net;
 using System.Net.Sockets;
+using RogyWatchCommon;
 
 namespace APIServerModule
 {
@@ -15,10 +16,10 @@ namespace APIServerModule
         private static bool _wsRunnning;
         private static List<WebSocket> _wsclients = new List<WebSocket>();
 
-        public static void StartWebSocket<T>(T core) where T : IAPIServerCore
+        public static void StartWebSocketServer<T>(T core, Config config) where T : IAPIServerCore
         {
             _wsRunnning = true;
-            Task.Run(()=>WSServer(core));
+            Task.Run(()=>WSServer(core, config));
         }
 
         public static void CloseWebSocket()
@@ -29,16 +30,16 @@ namespace APIServerModule
         }
         
         
-        private static void WSServer<T>(T core) where T : IAPIServerCore
+        private static void WSServer<T>(T core, Config config) where T : IAPIServerCore
         {
             try
             {
                 _httpListener = new HttpListener();
-                _httpListener.Prefixes.Add("http://*:8000/");
+                _httpListener.Prefixes.Add($"http://{config.WebSocketSTD.Host}:{config.WebSocketSTD.Port}/");
                 _httpListener.Start();
 
                 _errHttplistener = new HttpListener();
-                _errHttplistener.Prefixes.Add("http://*:8500/");
+                _errHttplistener.Prefixes.Add($"http://{config.WebSocketSTDERR.Host}:{config.WebSocketSTDERR.Port}/");
                 _errHttplistener.Start();
 
                 while (_wsRunnning)

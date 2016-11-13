@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel;
 
-namespace RogyWatchCommon.Config
+namespace RogyWatchCommon
 {
     public interface IServer{
         string Host { get; set; }
@@ -68,5 +68,4 @@ namespace RogyWatchCommon.Config
         [DefaultValue(424)]
         public ushort DEPTH_Y { get; set; } = 424;
     }
-
 }
