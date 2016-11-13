@@ -26,10 +26,10 @@ namespace APIServerModule
         {
         }
 
-        public static void StartPipeServer<T>(T core, Config config) where T : IAPIServerCore
+        public static Task StartPipeServer<T>(T core) where T : IAPIServerCore
         {
             _pipeRunnning = true;
-            Task.Factory.StartNew(()=>PipeServer(core, config));
+            return Task.Factory.StartNew(()=>PipeServer(core));
         }
 
         public static void ClosePipeSever()
@@ -66,9 +66,9 @@ namespace APIServerModule
             }
         }
 
-        private static void PipeServer<T>(T core, Config config) where T : IAPIServerCore
+        private static void PipeServer<T>(T core) where T : IAPIServerCore
         {
-            PipeStart(config);
+            PipeStart(core.Config);
             while (_pipeRunnning)
             {
                 try
@@ -87,7 +87,7 @@ namespace APIServerModule
 
                     // エラー処理
                     _pipe.Close();
-                    PipeStart(config);
+                    PipeStart(core.Config);
                     continue;
                 }
             }
@@ -101,10 +101,10 @@ namespace APIServerModule
         private static IPEndPoint _remote = null;
         private static bool _udpRunning;
 
-        public static void StartUDPServer<T>(T core, Config config) where T : IAPIServerCore
+        public static Task StartUDPServer<T>(T core, Config config) where T : IAPIServerCore
         {
             _udpRunning = true;
-            Task.Factory.StartNew(()=>UDPServer(core, config));
+            return Task.Factory.StartNew(()=>UDPServer(core, config));
         }
 
         public static void CloseUDPServer()

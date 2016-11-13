@@ -14,13 +14,20 @@ namespace APIServerModule
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="core"></param>
-        public static void StartAPIServer<T>(T core, Config config) where T : IAPIServerCore
+        public static void StartAPIServer<T>(T core) where T : IAPIServerCore
         {
             //StartUDPServer(core);
             //StartPipeServer(core);
             //StartWebSocketServer(core);
-            foreach (var server in config.Start)
-                typeof(APIServerExterior).GetMethod($"Start{server}Server").Invoke(null, new object[] {core, config});
+
+            var tasks = new List<Task>();
+            foreach (var server in core.Config.Start)
+                tasks.Add((Task)typeof(APIServerExterior)
+                    .GetMethod($"Start{server}Server")
+                    .MakeGenericMethod(typeof(IAPIServerCore))
+                    .Invoke(null, new object[] {core}));
+            foreach (var task in tasks)
+                task.Wait();
         }
 
         // Result ex.            

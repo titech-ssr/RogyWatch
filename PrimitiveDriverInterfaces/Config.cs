@@ -67,6 +67,11 @@ namespace RogyWatchCommon
             }
             return result;
         }
+
+        public override string ToString()
+        {
+            return JsonConvert.SerializeObject(this);
+        }
     }
 
 }

@@ -43,6 +43,8 @@ namespace APIServerTest
             var arg = tokens.Where((el, i) => i > 0);
             return GetType().GetMethod(tokens[0], new[] { typeof(T) }).Invoke(this, new[] { arg.ToArray() });
         }
+
+        public Config Config { get; set; }
     }
 
     [TestClass]
@@ -51,9 +53,8 @@ namespace APIServerTest
         [TestMethod]
         public void PipeServer_Test()
         {
-            var core = new APIServerCoreTest();
-            var config = new Config();
-            APIServerExterior.StartPipeServer(core, config);
+            var core = new APIServerCoreTest() { Config = new Config() };
+            APIServerExterior.StartPipeServer(core);
             Thread.Sleep(500);
 
             var client = new System.IO.Pipes.NamedPipeClientStream(".", "Kinect", System.IO.Pipes.PipeDirection.InOut, System.IO.Pipes.PipeOptions.Asynchronous);

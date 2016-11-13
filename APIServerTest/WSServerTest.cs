@@ -63,9 +63,8 @@ namespace APIServerTest
         [TestMethod]
         public void WebSocketServer_Test()
         {
-            var core = new APIServerCoreTest();
-            var config = new Config();
-            APIServerExterior.StartWebSocketServer(core, config);
+            var core = new APIServerCore() { Config = new Config() };
+            APIServerExterior.StartWebSocketServer(core);
             Console.ReadLine();
             APIServerExterior.CloseWebSocket();
         }

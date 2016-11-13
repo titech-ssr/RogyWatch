@@ -69,7 +69,7 @@ namespace PrimitivesTest
         {
             var depth1 = PrimitiveServerModule.PrimitiveServer.GetDepth<short[]>(KinectVersion.V1);
             var depth2 = PrimitiveServerModule.PrimitiveServer.GetDepth<ushort[]>(KinectVersion.V2);
-            var defult = new RogyWatchCommon.Config.Config();
+            var defult = new Config();
 
             Assert.AreEqual(
                 defult.PrimitiveDriverV1.DEPTH_X*defult.PrimitiveDriverV1.DEPTH_Y

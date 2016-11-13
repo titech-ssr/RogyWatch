@@ -39,6 +39,8 @@ namespace RogyWatchCommon
         public string Host { get; set; } = "*";
         [DefaultValue(8500)]
         public ushort Port { get; set; } = 8500;
+        [DefaultValue(5)]
+        public ushort ConnectionTimeout { get; set; } = 5;
     }
 
     public interface IPrimitiveDriver{

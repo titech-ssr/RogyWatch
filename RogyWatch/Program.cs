@@ -14,10 +14,10 @@ namespace RogyWatch
         {
             try
             {
-                var config = Config.DeSerialize();
-                var core = new APIServerCore();
-                APIServerExterior.StartAPIServer(core, config);
-            }catch(Exception ex)
+                var core = new APIServerCore() { Config = Config.DeSerialize() };
+                APIServerExterior.StartAPIServer(core);
+            }
+            catch (Exception ex)
             {
                 Console.WriteLine($"{ex.Message}\n{ex.StackTrace}");
             }
