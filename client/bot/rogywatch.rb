@@ -9,7 +9,7 @@ require 'pp'
 require 'date'
 
 require 'bundler'
-require 'lib/auth'
+require 'lib/tools'
 require 'lib/bot'
 
 

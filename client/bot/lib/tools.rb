@@ -26,3 +26,21 @@ def authoricate(screen_name:nil, type:nil, keys:nil)
 
 end
 
+
+def upload(files)
+  media_ids = []
+  files.each do |media_filename|
+    media_ids << rest.upload(File.new(media_filename))
+  end
+  media_ids
+end
+
+
+def rogy_watch(rest, status, life_area, work_area, filename, dirs)
+  media_ids = upload(dirs.map{|dir| "#{dir}/#{filename}.png"})
+  
+  rest.update(
+    "@#{status.user.screen_name} #{life_area} #{work_area}",
+    in_reply_to_status: status,
+    media_ids: media_ids.join(','))
+end
