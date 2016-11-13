@@ -11,12 +11,12 @@ namespace Attei
     {
         static Attei() {}
 
-        public static int PersonCounter<T>(string date, KinectVersion v, T depth)
+        public static int PersonCounter<T>(string date, KinectVersion v, T depth, Config config)
         {
             if (v == KinectVersion.V1)
-                return PCL.V1.KinectDisp4(date, (short[])(object)depth);
+                return PCL.V1.KinectDisp4(date, (short[])(object)depth, config);
             else
-                return PCL.V2.KinectDisp4(date, (ushort[])(object)depth);
+                return PCL.V2.KinectDisp4(date, (ushort[])(object)depth, config);
         }
     }
 

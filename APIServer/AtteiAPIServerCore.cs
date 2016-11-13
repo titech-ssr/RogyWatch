@@ -25,8 +25,8 @@ namespace APIServerModule
             var depth1 = PrimitiveServer.GetDepth<short[]>(KinectVersion.V1);
             var depth2 = PrimitiveServer.GetDepth<ushort[]>(KinectVersion.V2);
 
-            var count1 = Attei.Attei.PersonCounter(date.First(), KinectVersion.V1, depth1);
-            var count2 = Attei.Attei.PersonCounter(date.First(), KinectVersion.V2, depth2);
+            var count1 = Attei.Attei.PersonCounter(date.First(), KinectVersion.V1, depth1, Config);
+            var count2 = Attei.Attei.PersonCounter(date.First(), KinectVersion.V2, depth2, Config);
 
             return $"{count1} {count2}";
         }

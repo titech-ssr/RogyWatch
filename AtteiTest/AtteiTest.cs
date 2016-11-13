@@ -26,7 +26,7 @@ namespace AtteiTest
 
                     var date = DateTime.Now;
                     var date_str = $"{date.Year}_{date.Month}_{date.Day}_{date.Hour}_{date.Minute}_Test";
-                    var count = Attei.Attei.PersonCounter(date_str, KinectVersion.V1, d1);
+                    var count = Attei.Attei.PersonCounter(date_str, KinectVersion.V1, d1, new Config());
 
                     // dependent when V1.obj gotten
                     Assert.AreEqual(0, count);
@@ -45,7 +45,7 @@ namespace AtteiTest
 
                     var date = DateTime.Now;
                     var date_str = $"{date.Year}_{date.Month}_{date.Day}_{date.Hour}_{date.Minute}_Test";
-                    var count = Attei.Attei.PersonCounter(date_str, KinectVersion.V2, d2);
+                    var count = Attei.Attei.PersonCounter(date_str, KinectVersion.V2, d2, new Config());
 
                     // dependent when V2.obj gotten
                     Assert.AreEqual(5, count);

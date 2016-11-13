@@ -42,7 +42,7 @@ namespace Attei.PCL
         
         static V1()
         {
-            var conf = new RogyWatchCommon.Config.PrimitiveDriverV1();
+            var conf = new PrimitiveDriverV1();
             DEPTH_X = conf.DEPTH_X;
             DEPTH_Y = conf.DEPTH_Y;
             init();
@@ -444,7 +444,7 @@ namespace Attei.PCL
             }
         } //    end of search2
 
-        public static int KinectDisp4(string date, short[] depth)
+        public static int KinectDisp4(string date, short[] depth, Config config)
         {
             obj2 = new bool[DEPTH_Y, DEPTH_X];
 
@@ -489,7 +489,7 @@ namespace Attei.PCL
                 }
             }
 
-            MakeAsc(date);
+            MakeAsc(date, config.AtteiConfig.MakeAscDir1);
 
 
             SearchBlob(depthPixel);
@@ -619,7 +619,7 @@ namespace Attei.PCL
                 }
             }
 
-            BMPDraw(Join, date);
+            BMPDraw(Join, date, config.AtteiConfig.Template1, config.AtteiConfig.OutDir1);
 
             return Join.Count;
         }

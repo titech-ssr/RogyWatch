@@ -10,9 +10,9 @@ namespace Attei.PCL
     public partial class V1
     {
 
-        private static void MakeAsc(string dateTitle)
+        private static void MakeAsc(string dateTitle, string dir)
         {
-            StreamWriter sw = new StreamWriter("C:\\Users\\Maquinista\\Desktop\\hisui-1_13_0_0-20110927\\bin\\V1\\" + dateTitle + "data.asc");
+            StreamWriter sw = new StreamWriter($"{dir}\\{dateTitle}data.asc");
             for (int y = 0; y < DEPTH_Y; y++)
             {
                 for (int x = 0; x < DEPTH_X; x++)
@@ -27,12 +27,10 @@ namespace Attei.PCL
         }
 
 
-        public static void BMPDraw(List<Vector3D> points, string date)
+        public static void BMPDraw(List<Vector3D> points, string date, string tempPath, string outdir)
         {
             try
             {
-                string tempPath = @"C:\template_V1.bmp";
-
                 Bitmap bmp = new Bitmap(tempPath);
 
                 using (var ms_to_byte = new MemoryStream())
@@ -78,7 +76,7 @@ namespace Attei.PCL
                     using (var ms_to_bmp = new MemoryStream(output))
                     {
                         var bmp2 = new Bitmap(ms_to_bmp);
-                        bmp2.Save($"C:\\V1_png\\{date}.png", ImageFormat.Png);
+                        bmp2.Save($"{outdir}\\{date}.png", ImageFormat.Png);
                     }
                 }
             }
