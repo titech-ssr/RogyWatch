@@ -15,7 +15,7 @@ require 'lib/bot'
 
 ScreenName  = :rogy_watch
 cert = (config = YAML.load_file("config.yaml"))[ScreenName]
-Admin       = config[ScreenName][:admin]
+Admin = config[ScreenName][:admin]
 
 
 rest = authoricate(screen_name:ScreenName, type: :REST, keys:cert)
@@ -38,6 +38,10 @@ bot.close
 }
 exit 
 =end
+
+def test(rest, status, config,  a)
+rogy_watch(rest, status, 0, 0, "test", config[ScreenName][:media_dirs])
+end
 
 stream.user{|status|
 

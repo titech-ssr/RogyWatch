@@ -36,11 +36,15 @@ def upload(files)
 end
 
 
-def rogy_watch(rest, status, life_area, work_area, filename, dirs)
-  media_ids = upload(dirs.map{|dir| "#{dir}/#{filename}.png"})
-  
+def rogy_watch(rest, status, life_area, work_area, filename, dirs, type: :png)
+  media_ids = upload(dirs.map{|dir| "#{dir}/#{filename}.#{type}"})
+  tweet = <<-"EOF"
+@#{status.user.screen_name} 
+生活領域人#{life_area}人くらい、
+工作領域人#{work_area}人くらいかも？
+EOF
   rest.update(
-    "@#{status.user.screen_name} #{life_area} #{work_area}",
+    tweet,
     in_reply_to_status: status,
     media_ids: media_ids.join(','))
 end
