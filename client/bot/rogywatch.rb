@@ -25,30 +25,16 @@ cert = nil
 ws_conf = config[:server][:ws]
 bot = RogyWatch::Bot.new(ws_conf)
 
-=begin
-loop{
-bot.connect
+
+puts "start streaming"
+
 begin
-  bot.send("#{gets.chomp}")
-  p result = bot.read(ws_conf[:readtimeout]).data
-rescue Exception => e
-  puts e.message, e.backtrace
-end
-bot.close
-}
-exit 
-=end
-
-def test(rest, status, config,  a)
-  rogy_watch(rest, status, 0, 0, "test", config[ScreenName][:media_dirs], type: :jpg)
-end
-
 stream.user{|status|
 
   case status
 
     when Twitter::Tweet then
-      puts "#{status.user.screen_name}\n#{status.text}"
+      puts "#{status.user.screen_name}\n#{status.text} #{(reply = status.text =~ /@#{ScreenName}/) && status.user.id == Admin} #{reply}"
       content = status.text.gsub(/@#{ScreenName}/, "").strip
 
       if (reply = status.text =~ /@#{ScreenName}/) && status.user.id == Admin then
@@ -67,35 +53,36 @@ stream.user{|status|
       elsif reply
         now = "#{(d = DateTime.now).year}_#{d.month}_#{d.day}_#{d.hour}_#{d.second}"
         Thread.new{
-          bot.connect(ws_conf[:err][:connection_timeout])
           begin
+            bot.connect(ws_conf[:err][:connection_timeout])
+
             if    content =~ /how/i then bot.send("HowManyPeople #{now}")
             elsif content =~ /echo/i then bot.send("Echo #{now}")
-            elsif content =~ /人|多|何/ || content.strip == "" then
+            else
               bot.send("HowManyPeople #{now}")
               result = bot.read(ws_conf[:timeout]).data.split(/\s+/).map{|n| n.strip}
               rogy_watch(
-                rest, status, result[0], result[1], now, 
+                rest, status, result[1], result[0], now, 
                 config[ScreenName][:media_dirs])
               next
-            elsif content.size < 100 then bot.send(content)
-            else
-              rest.update("@#{status.user.screen_name} you said #{content}\n#{d.to_s}", in_reply_to_status: status)
-              next
             end
+
             p result = bot.read(ws_conf[:timeout]).data
             rest.update("@#{status.user.screen_name} #{result}\n#{d.to_s}"[0, 140], in_reply_to_status: status)
           rescue Exception => e
             rest.update("@#{status.user.screen_name} #{e.message}\n#{d.to_s}"[0, 140], 
-              in_reply_to_status: status) #rescue puts("#{$!.message}\n#{$!.backtrace}")
+              in_reply_to_status: status) rescue puts("#{$!.message}\n#{$!.backtrace}")
             puts "@#{status.user.screen_name} #{e.message}\n#{e.backtrace}"
+          ensure
+            bot.close
           end
-          bot.close
         }
       end
 
     when Twitter::Streaming::Event then
-
   end
 
-}
+} 
+rescue Exception => e
+  puts e
+end

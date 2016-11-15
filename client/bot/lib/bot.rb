@@ -50,7 +50,7 @@ module RogyWatch
 
       frame = WebSocket::Frame::Outgoing::Client.new(data: line, type: type, version: @std_handshake.version)
       begin
-        @std.write frame.to_s
+        @std&.write frame.to_s
       rescue Errno::EPIPE => e
         $stderr.puts "#{e.message}\n#{e.backtrace}"
       end
@@ -117,12 +117,12 @@ module RogyWatch
       send(nil, type: :close)
       begin
         frame = WebSocket::Frame::Outgoing::Client.new(data: "close", type: :close, version: @err_handshake.version)
-        @err.write frame.to_s
+        @err&.write frame.to_s
       rescue Errno::EPIPE => e
         $stderr.puts "#{e.message}\n#{e.backtrace}"
       end
-      @std.close
-      @err.close
+      @std&.close
+      @err&.close
     end
 
 
