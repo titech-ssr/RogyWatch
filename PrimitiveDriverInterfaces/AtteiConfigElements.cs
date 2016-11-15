@@ -28,10 +28,10 @@ namespace RogyWatchCommon
         [DefaultValue(@"C:\template_V2.bmp")]
         public string Template2 { get; set; } = @"C:\template_V2.bmp";
 
-        [DefaultValue(@"C:\V1_png")]
-        public string OutDir1 { get; set; } = @"C:\template_V1.bmp";
+        [DefaultValue(@"C:\Users\Public\share\V1")]
+        public string OutDir1 { get; set; } = @"C:\Users\Public\share\V1";
 
-        [DefaultValue(@"C:\V2_png")]
-        public string OutDir2 { get; set; } = @"C:\template_V2.bmp";
+        [DefaultValue(@"C:\Users\Public\share\V2")]
+        public string OutDir2 { get; set; } = @"C:\Users\Public\share\V2";
     }
 }
