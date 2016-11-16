@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.5">
+<title>RogyWatch</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
+<link rel="stylesheet" href="css/asciidoctor.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+</head>
+<body class="article">
+<div id="header">
+<h1>RogyWatch</h1>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="outline">1. 概要</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="https://github.com/titech-ssr/RogyWatch">部室人多いBot</a>(以下人多いBot)はロ技研部室内にいる人の数を教えてくれるプログラムである。Kinectより取得したデータをもとに人数を取得する。<br>
+人多いBotの大まかな構成は以下のようになっている。</p>
+</div>
+<div class="imageblock" style="text-align: center">
+<div class="content">
+<img src="img/outline.svg" alt="outline">
+</div>
+<div class="title">Figure 1. 構成</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">PrimitiveDriver</dt>
+<dd>
+<p>Kinectから情報を取得する。KinectはV1とV2とでMicrosoftから提供されているSDKが異なるためPrimitiveDriverにはV1とV2が存在する。</p>
+</dd>
+<dt class="hdlist1">PrimitiveServer</dt>
+<dd>
+<p>Kinectに対する統一的なインターフェースを提供することでV1とV2の差異をなるべく吸収する。また、lockを用いることでKinectに対する同時アクセスを防ぐ。</p>
+</dd>
+<dt class="hdlist1">APIServer</dt>
+<dd>
+<p>Kinectから取得した情報を外部に対して提供する。</p>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">WebSocket</dt>
+<dd>
+<p>現時点ではKinectから取得した情報を加工した、小さなデータのやり取りに使う。やり取りに使うデータは文字列のみ実装してあるが、将来的にはバイナリでの通信もあり得る。</p>
+</dd>
+<dt class="hdlist1">UDP,NamedPipe</dt>
+<dd>
+<p>Kinectから取得したDepthデータや座標データなど、大量の情報のやり取りに使う。ただし動作は未だ十分にテストしていないので不安定と思われる。</p>
+</dd>
+</dl>
+</div>
+</dd>
+<dt class="hdlist1">share</dt>
+<dd>
+<p>人多いBotが人数を数えるとこの公開ディレクトリに画像が保存される。</p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2016-11-16 20:49:47 JST
+</div>
+</div>
+<link rel="stylesheet" href="highlight/styles/dracula.min.css">
+<script src="highlight/highlight.min.js"></script>
+<script>hljs.initHighlighting()</script>
+</body>
+</html>

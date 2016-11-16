@@ -1,0 +1,33 @@
+:source-highlighter: highlightjs
+:highlightjsdir: highlight
+:highlightjs-theme: dracula
+:imagesdir: img
+:stylesdir: css
+:icons: font
+:linkcss:
+:sectnums:
+
+= RogyWatch
+
+
+[[outline]]
+== 概要
+
+https://github.com/titech-ssr/RogyWatch[部室人多いBot](以下人多いBot)はロ技研部室内にいる人の数を教えてくれるプログラムである。Kinectより取得したデータをもとに人数を取得する。 +
+人多いBotの大まかな構成は以下のようになっている。
+
+.構成
+image::outline.svg[outline, align="center"]
+
+PrimitiveDriver::
+Kinectから情報を取得する。KinectはV1とV2とでMicrosoftから提供されているSDKが異なるためPrimitiveDriverにはV1とV2が存在する。
+PrimitiveServer::
+Kinectに対する統一的なインターフェースを提供することでV1とV2の差異をなるべく吸収する。また、lockを用いることでKinectに対する同時アクセスを防ぐ。
+APIServer::
+Kinectから取得した情報を外部に対して提供する。
+  WebSocket:::
+  現時点ではKinectから取得した情報を加工した、小さなデータのやり取りに使う。やり取りに使うデータは文字列のみ実装してあるが、将来的にはバイナリでの通信もあり得る。
+  UDP,NamedPipe:::
+  Kinectから取得したDepthデータや座標データなど、大量の情報のやり取りに使う。ただし動作は未だ十分にテストしていないので不安定と思われる。
+share::
+人多いBotが人数を数えるとこの公開ディレクトリに画像が保存される。
