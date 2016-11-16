@@ -43,3 +43,5 @@ Kinectとのやり取りをし、内外へのインターフェースを提供�
 Attei::
 develop::
 まだ未使用
+client::
+TwitterのBot
