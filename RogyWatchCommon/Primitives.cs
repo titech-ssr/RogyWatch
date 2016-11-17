@@ -2,6 +2,10 @@
 {
     namespace Primitive.DriverInterface
     {
+        /// <summary>
+        /// Primitive Driver should implement.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
         public interface IPrimitiveDriver<T>
         {
             ushort RANGE_X { get; }

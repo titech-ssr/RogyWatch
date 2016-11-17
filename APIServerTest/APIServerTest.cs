@@ -119,7 +119,7 @@ namespace APIServerTest
         {
             var core = new APIServerCoreTest();
             var config = new Config();
-            APIServerExterior.StartUDPServer(core, config);
+            APIServerExterior.StartUDPServer(core);
 
             var _udp = new UdpClient(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 4500));
 

@@ -4,6 +4,9 @@ using APIServerModule;
 
 namespace RogyWatch
 {
+    /// <summary>
+    /// RogyWatch Main
+    /// </summary>
     class Program
     {
         static void Main(string[] args)

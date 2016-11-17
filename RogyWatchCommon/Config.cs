@@ -15,6 +15,9 @@ namespace RogyWatchCommon
         string[] Start { get; set; }
     }
 
+    /// <summary>
+    /// Config class for save/recover settings. Using Json.NET
+    /// </summary>
     [JsonObject()]
     public partial class Config : IConfig
     {

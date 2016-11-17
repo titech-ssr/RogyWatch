@@ -1,5 +1,8 @@
 ﻿using System;
 
+/// <summary>
+/// Provide API Server externally
+/// </summary>
 namespace APIServerModule
 {
     /// <summary>

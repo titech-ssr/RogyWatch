@@ -14,12 +14,21 @@ namespace APIServerModule
         private static bool _wsRunnning;
         private static List<WebSocket> _wsclients = new List<WebSocket>();
 
+        /// <summary>
+        /// Start named websocket server. Receive APIServerCore and Task.Run()
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="core"></param>
+        /// <returns></returns>
         public static Task StartWebSocketServer<T>(T core) where T : IAPIServerCore
         {
             _wsRunnning = true;
             return Task.Run(()=>WSServer(core));
         }
 
+        /// <summary>
+        /// Close named webssocket server.
+        /// </summary>
         public static void CloseWebSocket()
         {
             _wsRunnning = false;
@@ -28,6 +37,11 @@ namespace APIServerModule
         }
         
         
+        /// <summary>
+        /// Main body of WebSocketServer. requires APIServerCore.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="core"></param>
         private static void WSServer<T>(T core) where T : IAPIServerCore
         {
             try
@@ -75,14 +89,18 @@ namespace APIServerModule
             }
         }
 
+        /// <summary>
+        /// Invoked when NamedPipeServer received data.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="lisCon"></param>
+        /// <param name="ws"></param>
+        /// <param name="ws_err"></param>
+        /// <param name="core"></param>
         private static async void OnReceiveWS<T>(HttpListenerContext lisCon, WebSocket ws, WebSocket ws_err, T core) where T : IAPIServerCore
         {
             Console.WriteLine($"{DateTime.Now}: new session {lisCon.Request.RemoteEndPoint.Address}");
-            //var ws = (await lisCon.AcceptWebSocketAsync(subProtocol: null)).WebSocket;
             _wsclients.Add(ws);
-
-
-            //WebSocket ws_err = null;
 
 
             var buff = new ArraySegment<byte>(new byte[512]);
@@ -113,7 +131,7 @@ namespace APIServerModule
         }
 
         /// <summary>
-        /// mediation between webssocket to ControlServerCore
+        /// Mediation between webssocket to APIServerCore
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="ws"></param>

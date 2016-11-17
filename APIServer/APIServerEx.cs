@@ -10,7 +10,7 @@ using RogyWatchCommon;
 namespace APIServerModule
 {
     /// <summary>
-    /// Provide NamedPipe and UDP API
+    /// Provide NamedPipe and UDP API Server exterior.
     /// </summary>
     public partial class APIServerExterior  // Pipe
     {
@@ -19,16 +19,28 @@ namespace APIServerModule
         private static StreamWriter _writer;
         private static bool _pipeRunnning;
 
+        /// <summary>
+        /// empty
+        /// </summary>
         static APIServerExterior()
         {
         }
 
+        /// <summary>
+        /// Start named pipe server. Receive APIServerCore and Task.Run()
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="core"></param>
+        /// <returns></returns>
         public static Task StartPipeServer<T>(T core) where T : IAPIServerCore
         {
             _pipeRunnning = true;
             return Task.Factory.StartNew(()=>PipeServer(core));
         }
 
+        /// <summary>
+        /// Close named pipe server.
+        /// </summary>
         public static void ClosePipeSever()
         {
             if (_pipeRunnning)
@@ -43,6 +55,10 @@ namespace APIServerModule
             }
         }
 
+        /// <summary>
+        /// Makes pipe,reader,writer stream instance and wait for pipe connnection.
+        /// </summary>
+        /// <param name="config"></param>
         private static void PipeStart(Config config)
         {
             _pipe = new NamedPipeServerStream(config.NamedPipe.Host, PipeDirection.InOut, 1, PipeTransmissionMode.Byte, PipeOptions.Asynchronous);
@@ -51,6 +67,12 @@ namespace APIServerModule
             _writer = new StreamWriter(_pipe);
         }
 
+        /// <summary>
+        /// Invoked when NamedPipeServer received data.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="data">received data series</param>
+        /// <param name="core"></param>
         private static void OnReceivePipe<T>(byte[] data,  T core) where T : IAPIServerCore
         {
             try
@@ -63,6 +85,11 @@ namespace APIServerModule
             }
         }
 
+        /// <summary>
+        /// Main body of PipeServer. requires APIServerCore.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="core"></param>
         private static void PipeServer<T>(T core) where T : IAPIServerCore
         {
             PipeStart(core.Config);
@@ -98,12 +125,23 @@ namespace APIServerModule
         private static IPEndPoint _remote = null;
         private static bool _udpRunning;
 
-        public static Task StartUDPServer<T>(T core, Config config) where T : IAPIServerCore
+        /// <summary>
+        /// Start udp server. Receive APIServerCore and Task.Run()
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="core"></param>
+        /// <param name="config"></param>
+        /// <returns></returns>
+        public static Task StartUDPServer<T>(T core) where T : IAPIServerCore
         {
             _udpRunning = true;
-            return Task.Factory.StartNew(()=>UDPServer(core, config));
+            return Task.Factory.StartNew(()=>UDPServer(core));
         }
 
+
+        /// <summary>
+        /// Close udp server.
+        /// </summary>
         public static void CloseUDPServer()
         {
             _udpRunning = false;
@@ -111,9 +149,14 @@ namespace APIServerModule
             _client.Close();
         }
 
-        private static void UDPServer<T>(T core, Config config) where T : IAPIServerCore
+        /// <summary>
+        /// Main body of UDPServer. requires APIServerCore.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="core"></param>
+        private static void UDPServer<T>(T core) where T : IAPIServerCore
         {
-            _udp = new UdpClient(new IPEndPoint(IPAddress.Parse(config.UDP.Host), config.UDP.Port));
+            _udp = new UdpClient(new IPEndPoint(IPAddress.Parse(core.Config.UDP.Host), core.Config.UDP.Port));
             _client = new UdpClient(4000);
 
             while (_udpRunning)
@@ -123,6 +166,13 @@ namespace APIServerModule
             }
         }
 
+        /// <summary>
+        /// Invoked when UDPServer received data.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="data">received data series</param>
+        /// <param name="remote"></param>
+        /// <param name="core"></param>
         private static void OnReceiveUDP<T>(byte[] data, IPEndPoint remote, T core) where T : IAPIServerCore
         {
             try

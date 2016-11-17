@@ -2,6 +2,9 @@
 
 namespace PrimitiveServerModule
 {
+    /// <summary>
+    /// Provide Unified Interface to access Kinect V1 and V2
+    /// </summary>
     public class PrimitiveServer
     {
         private static object _lock1 = new object();

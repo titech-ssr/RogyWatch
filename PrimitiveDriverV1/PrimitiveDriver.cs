@@ -11,7 +11,7 @@ namespace PrimitiveDriverV1
 
     /// <summary>
     /// This is a class to translate Kinect Verision dependent type difference into primitive data type (e.g. DepthImagePixel into short[]) <para/>
-    /// for Kinect V1.8
+    /// for Kinect V1.6
     /// </summary>
     public class PrimitiveDriver : PrimitiveDriverBase, IDisposable
     {
@@ -55,7 +55,7 @@ namespace PrimitiveDriverV1
         }
 
         /// <summary>
-        /// Get Depth array of 512x424 and trial limited to 10000 times by default <para/>
+        /// Get Depth array of 640x480 and trial limited to 10000 milli seconds by default <para/>
         /// Exception: <para />
         /// TimeoutException
         /// </summary>
