@@ -5,8 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net.WebSockets;
 using System.Net;
-using System.Net.Sockets;
-using RogyWatchCommon;
 
 namespace APIServerModule
 {

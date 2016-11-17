@@ -4,7 +4,6 @@ using APIServerModule;
 using System.Net;
 using RogyWatchCommon;
 using System.Net.Sockets;
-using System.Threading.Tasks;
 using System.Text;
 using System.Threading;
 using System.Linq;

@@ -1,7 +1,4 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Linq;
-using RogyWatchCommon.Primitive.DriverInterface;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RogyWatchCommon;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;

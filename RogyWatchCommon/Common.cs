@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RogyWatchCommon
 {
@@ -19,23 +15,6 @@ namespace RogyWatchCommon
         public T X;
         public T Y;
         public T Z;
-    }
-
-    /// <summary>
-    /// Holds unique Server class &lt; - &gt; instance map. So, any server class must have only one instance.
-    /// </summary>
-    public static class Servers
-    {
-        private static Dictionary<Type, dynamic> _servers = new Dictionary<Type, dynamic>();
-        public static T Get<T>()
-        {
-            return (T)_servers[typeof(T)];
-        }
-
-        public static void Set<T>(T s)
-        {
-            _servers.Add(typeof(T), s);
-        }
     }
 
     [Serializable()]
