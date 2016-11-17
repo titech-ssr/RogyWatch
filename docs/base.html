@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.5">
+<title>base</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
+<link rel="stylesheet" href="css/asciidoctor.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>base</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#outline">1. 概要</a></li>
+<li><a href="#rogy-watch-server-configuration">2. 設定</a></li>
+<li><a href="#rogy-watch-warning">3. 注意</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="outline">1. 概要</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>主にKinectとの情報のやり取りをし、内外への橋渡しをする部分の構成を担うブランチである。このブランチは人多いBotの根幹を担うブランチであり、樹に喩えれば幹に相当する部分である。他のブランチとのマージ作業には十分に注意する必要がある。</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="rogy-watch-server-configuration">2. 設定</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>人多いBotは実行ファイルと同ディレクトリに配置されたconfig.jsonを設定ファイルとする。各種情報をこれに記載する必要がある。 また、実際の稼働では現時点での計測アルゴリズムに採用しているAtteiブランチにてconfig.jsonの設定が必要である。</p>
+</div>
+<div class="listingblock">
+<div class="title">config.json</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-javascript" data-lang="javascript"></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="rogy-watch-warning">3. 注意</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>KinectはV1とV2とでMicrosoftから的供されているSDKが異なり、更に悪いことにこれらの名前空間、クラス名が被っているため通常の方法では同一アセンブリ内に参照を追加することはできない。</p>
+</div>
+<div class="paragraph">
+<p><a href="http://stackoverflow.com/questions/35874140/setup-two-kinect-v1-and-v2" class="bare">http://stackoverflow.com/questions/35874140/setup-two-kinect-v1-and-v2</a></p>
+</div>
+<div class="paragraph">
+<p>これについては上のような方法で解決できるはずであるが、本プロジェクトではそもそもPrimitiveDriverとしてKinectへのアクセスをバージョンごとに別アセンブリに分けているのでこれら干渉は起こらなないはずである。</p>
+</div>
+<div class="paragraph">
+<p>しかし現実問題、コンパイルは通るが実行時にNo method Errorが発生して実行することはできない。おそらく、コンパイラかデバッガのバグであると思われる。色々試してみた結果、生成された実行ファイルRogyWatch.exeのファイル名を変えると実行できることがわかった。したがって、ビルド毎にRogyWatch.exeを別の名前に変え、プロジェクトの設定よりデバッグ対象を外部のプログラムとして名前を変えたRogyWatch.exeに変える必要がある。<br></p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>この変更は既に既存ブランチで適用済みである</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>この問題については現時点では根本的な解決方法は不明であり、Microsoftへの報告が必要である。</p>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2016-11-18 01:08:56 JST
+</div>
+</div>
+<link rel="stylesheet" href="highlight/styles/dracula.min.css">
+<script src="highlight/highlight.min.js"></script>
+<script>hljs.initHighlighting()</script>
+</body>
+</html>

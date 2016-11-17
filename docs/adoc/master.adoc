@@ -1,0 +1,16 @@
+:source-highlighter: highlightjs
+:highlightjsdir: highlight
+:highlightjs-theme: dracula
+:imagesdir: img
+:stylesdir: css
+:icons: font
+:toc: left
+:linkcss:
+:sectnums:
+
+= master
+
+[[outline]]
+== 概要
+
+人多いBotのmasterブランチである。現時点では主にドキュメント用に使う。

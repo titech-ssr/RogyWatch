@@ -1,0 +1,44 @@
+:source-highlighter: highlightjs
+:highlightjsdir: highlight
+:highlightjs-theme: dracula
+:imagesdir: img
+:stylesdir: css
+:icons: font
+:toc: left
+:linkcss:
+:sectnums:
+
+= base
+
+[[outline]]
+== 概要
+
+主にKinectとの情報のやり取りをし、内外への橋渡しをする部分の構成を担うブランチである。このブランチは人多いBotの根幹を担うブランチであり、樹に喩えれば幹に相当する部分である。他のブランチとのマージ作業には十分に注意する必要がある。
+
+[[rogy-watch-server-configuration]]
+== 設定
+
+人多いBotは実行ファイルと同ディレクトリに配置されたconfig.jsonを設定ファイルとする。各種情報をこれに記載する必要がある。 また、実際の稼働では現時点での計測アルゴリズムに採用しているAtteiブランチにてconfig.jsonの設定が必要である。
+
+[source,javascript]
+.config.json
+----
+----
+
+[[rogy-watch-warning]]
+== 注意
+
+KinectはV1とV2とでMicrosoftから的供されているSDKが異なり、更に悪いことにこれらの名前空間、クラス名が被っているため通常の方法では同一アセンブリ内に参照を追加することはできない。 
+
+http://stackoverflow.com/questions/35874140/setup-two-kinect-v1-and-v2
+
+これについては上のような方法で解決できるはずであるが、本プロジェクトではそもそもPrimitiveDriverとしてKinectへのアクセスをバージョンごとに別アセンブリに分けているのでこれら干渉は起こらなないはずである。
+
+しかし現実問題、コンパイルは通るが実行時にNo method Errorが発生して実行することはできない。おそらく、コンパイラかデバッガのバグであると思われる。色々試してみた結果、生成された実行ファイルRogyWatch.exeのファイル名を変えると実行できることがわかった。したがって、ビルド毎にRogyWatch.exeを別の名前に変え、プロジェクトの設定よりデバッグ対象を外部のプログラムとして名前を変えたRogyWatch.exeに変える必要がある。 +
+
+[TIP]
+====
+この変更は既に既存ブランチで適用済みである
+====
+
+この問題については現時点では根本的な解決方法は不明であり、Microsoftへの報告が必要である。

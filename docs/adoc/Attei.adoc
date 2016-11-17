@@ -1,0 +1,20 @@
+:source-highlighter: highlightjs
+:highlightjsdir: highlight
+:highlightjs-theme: dracula
+:imagesdir: img
+:stylesdir: css
+:icons: font
+:toc: left
+:linkcss:
+:sectnums:
+
+= Attei
+
+[[outline]]
+== 概要
+
+[IMPORTANT]
+.あってぃ
+====
+あってぃ!!!
+====

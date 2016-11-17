@@ -36,12 +36,12 @@ share::
 [[branch]]
 == ブランチ
 
-master::
+- link:master.html[master] +
 materブランチ。まだ安定版がない😭
-base::
+- link:base.html[base] +
 Kinectとのやり取りをし、内外へのインターフェースを提供。
-Attei::
-develop::
+- link:Attei.html[Attei] +
+- link:develop.html[develop] +
 まだ未使用
-client::
+- link:client.html[client] +
 TwitterのBot
