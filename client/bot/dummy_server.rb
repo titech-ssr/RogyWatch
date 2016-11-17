@@ -16,6 +16,9 @@ err = config[:ws][:err]
 
 @std = nil
 @err = nil
+
+# dummy server for test
+#
 EM::WebSocket.start(host: std[:address], port: std[:port]) { |con|
 
     con.onopen do

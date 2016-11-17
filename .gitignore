@@ -305,10 +305,10 @@ build-iPhoneSimulator/
 # vendor/Pods/
 
 ## Documentation cache and generated files:
-/.yardoc/
-/_yardoc/
-/doc/
-/rdoc/
+.yardoc/
+_yardoc/
+#doc/
+rdoc/
 
 ## Environment normalization:
 .bundle/
@@ -330,8 +330,12 @@ Gemfile.lock
 
 vendor/
 
+yardoc/client/
+
 .*.swo
 .*.swp
 
 .byebug_history
 bye
+
+.*DS_Store

@@ -1,16 +1,24 @@
 require 'websocket-client-simple'
 require 'timeout'
 
+# Rogywatch namespace
+#
 module RogyWatch
 
+  # use to communicate with sever
+  #
   class Bot
 
-    
     def initialize(ws_conf)
       @ws_conf = ws_conf
     end
 
+    # connect to server. Not only std connection, also try to connect stderr
+    #
+    # @param [Fixnum] err_timeout specify timeout to connect stderr
+    # @return [void]
     def connect(err_timeout)
+
       @std, @std_handshake = handshake(@ws_conf[:std][:address], @ws_conf[:std][:port], ->(){ puts "std Opend" })
       sleep 1
       Timeout.timeout(err_timeout){
@@ -19,7 +27,13 @@ module RogyWatch
 
     end
 
-    def handshake(host, port, opened)
+    # connect to remote and send websocket handshake.
+    #
+    # @param [String] host  remote host
+    # @param [Fixnum] port  remote port
+    # @param [Proc]   opend invoked when handshaked
+    # @return [TCPSocket,WebSocket::Handshake::Client] remote, handshake
+    def handshake(host, port, opend)
 
       target = TCPSocket.new(host, port)
       handshake = WebSocket::Handshake::Client.new(url: "ws://#{host}:#{port}")
@@ -30,7 +44,7 @@ module RogyWatch
           print recv
           handshake << recv
           if handshake.finished? # open
-            opened.()
+            opend.()
             break
           end
         }
@@ -46,6 +60,11 @@ module RogyWatch
       return target, handshake
     end
 
+    # send data to connected remote
+    #
+    # @param [String] line  data
+    # @param [Symbol] type  data type. :text, :close, and so on. {http://qiita.com/south37/items/6f92d4268fe676347160}
+    # @return [void]
     def send(line, type: :text)
 
       frame = WebSocket::Frame::Outgoing::Client.new(data: line, type: type, version: @std_handshake.version)
@@ -57,6 +76,14 @@ module RogyWatch
 
     end
 
+
+    # read data from remote as WebSocket::Frame::Incoming::Client
+    #
+    # @param  [Fixnum] timeout  read timeout
+    # @raise  Timeout::Error
+    # @raise  Exception when stderr received data
+    # @return [WebSocket::Frame::Incoming::Client]
+    # @note if std and stderr connected, remote sent data using stderr raise Exception and Exception#message is set as "remote sent data"
     def read(timeout)
       frame = ::WebSocket::Frame::Incoming::Client.new
       threads = {}
@@ -98,9 +125,6 @@ module RogyWatch
         }
 
         threads[:std].join
-        #sleep 0.5
-        #threads.each{|k,n| n.kill}
-        #p threads.map{|k,n| n.value}
 
         ret = threads.select{|k,v| v&.value}.map do |k,v|
           if WebSocket::Frame::Incoming::Client === (val = v&.value)
@@ -113,6 +137,9 @@ module RogyWatch
       }
     end
 
+    # close connection
+    #
+    # @return [void]
     def close
       send(nil, type: :close)
       begin

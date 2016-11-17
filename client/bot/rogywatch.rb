@@ -13,13 +13,16 @@ require 'lib/tools'
 require 'lib/bot'
 
 
+# Rogywatch twitter bot screen name
+#
 ScreenName  = :rogy_watch
 cert = (config = YAML.load_file("config.yaml"))[ScreenName]
+# Administrator twitter id
 Admin = config[ScreenName][:admin]
 
 
-rest = authoricate(screen_name:ScreenName, type: :REST, keys:cert)
-stream = authoricate(screen_name:ScreenName, type: :Streaming, keys:cert)
+rest = authenticate(screen_name:ScreenName, type: :REST, keys:cert)
+stream = authenticate(screen_name:ScreenName, type: :Streaming, keys:cert)
 cert = nil
 
 ws_conf = config[:server][:ws]
