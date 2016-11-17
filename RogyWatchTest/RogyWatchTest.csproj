@@ -61,7 +61,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PrimitiveDriverInterfaces\RogyWatchCommon.csproj">
+    <ProjectReference Include="..\RogyWatchCommon\RogyWatchCommon.csproj">
       <Project>{003ca6c8-9c33-4dad-9c2e-8f597b12f197}</Project>
       <Name>RogyWatchCommon</Name>
     </ProjectReference>

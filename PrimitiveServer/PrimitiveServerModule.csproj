@@ -53,10 +53,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PrimitiveDriverInterfaces\RogyWatchCommon.csproj">
-      <Project>{003ca6c8-9c33-4dad-9c2e-8f597b12f197}</Project>
-      <Name>RogyWatchCommon</Name>
-    </ProjectReference>
     <ProjectReference Include="..\PrimitiveDriverV1\PrimitiveDriverV1.csproj">
       <Project>{b1fa4d80-21fe-427c-a2f5-46f9ea089725}</Project>
       <Name>PrimitiveDriverV1</Name>
@@ -64,6 +60,10 @@
     <ProjectReference Include="..\PrimitiveDriverV2\PrimitiveDriverV2.csproj">
       <Project>{4e312a29-fbb0-4c68-87d2-ee6500fbf1ca}</Project>
       <Name>PrimitiveDriverV2</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RogyWatchCommon\RogyWatchCommon.csproj">
+      <Project>{003ca6c8-9c33-4dad-9c2e-8f597b12f197}</Project>
+      <Name>RogyWatchCommon</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

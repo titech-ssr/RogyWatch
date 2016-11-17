@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RogyWatchCommon", "PrimitiveDriverInterfaces\RogyWatchCommon.csproj", "{003CA6C8-9C33-4DAD-9C2E-8F597B12F197}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrimitiveDriverV1", "PrimitiveDriverV1\PrimitiveDriverV1.csproj", "{B1FA4D80-21FE-427C-A2F5-46F9EA089725}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RogyWatch", "RogyWatch\RogyWatch.csproj", "{2CE6C84B-43DD-4E45-A6DB-907174880821}"
@@ -24,6 +22,7 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Attei", "Attei\Attei.csproj", "{8E18C6A8-8683-4D2F-AAAB-9F3A21D0D6EA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AtteiTest", "AtteiTest\AtteiTest.csproj", "{3AC9C409-454D-453F-9E75-D65C46F20A07}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RogyWatchCommon", "RogyWatchCommon\RogyWatchCommon.csproj", "{003CA6C8-9C33-4DAD-9C2E-8F597B12F197}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,10 +30,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{003CA6C8-9C33-4DAD-9C2E-8F597B12F197}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{003CA6C8-9C33-4DAD-9C2E-8F597B12F197}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{003CA6C8-9C33-4DAD-9C2E-8F597B12F197}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{003CA6C8-9C33-4DAD-9C2E-8F597B12F197}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B1FA4D80-21FE-427C-A2F5-46F9EA089725}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B1FA4D80-21FE-427C-A2F5-46F9EA089725}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B1FA4D80-21FE-427C-A2F5-46F9EA089725}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -75,6 +70,10 @@ Global
 		{3AC9C409-454D-453F-9E75-D65C46F20A07}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3AC9C409-454D-453F-9E75-D65C46F20A07}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3AC9C409-454D-453F-9E75-D65C46F20A07}.Release|Any CPU.Build.0 = Release|Any CPU
+		{003CA6C8-9C33-4DAD-9C2E-8F597B12F197}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{003CA6C8-9C33-4DAD-9C2E-8F597B12F197}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{003CA6C8-9C33-4DAD-9C2E-8F597B12F197}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{003CA6C8-9C33-4DAD-9C2E-8F597B12F197}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

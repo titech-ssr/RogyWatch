@@ -65,7 +65,7 @@
       <Project>{26d4bbfd-3a5d-4f10-a732-7fc5e9a6eb47}</Project>
       <Name>APIServerModule</Name>
     </ProjectReference>
-    <ProjectReference Include="..\PrimitiveDriverInterfaces\RogyWatchCommon.csproj">
+    <ProjectReference Include="..\RogyWatchCommon\RogyWatchCommon.csproj">
       <Project>{003ca6c8-9c33-4dad-9c2e-8f597b12f197}</Project>
       <Name>RogyWatchCommon</Name>
     </ProjectReference>
