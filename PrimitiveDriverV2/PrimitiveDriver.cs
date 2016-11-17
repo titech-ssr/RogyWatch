@@ -1,10 +1,6 @@
 ﻿extern alias KinectV2;
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using RogyWatchCommon;
 
 namespace PrimitiveDriverV2
@@ -12,7 +8,7 @@ namespace PrimitiveDriverV2
     using KinectV2::Microsoft.Kinect;
 
     /// <summary>
-    /// This is a class to translate Kinect Verision dependent type difference into primitive data type (e.g. DepthImagePixel into short[]) <para/>
+    /// This is a class to translate Kinect Verision dependent type difference into primitive data type <para/>
     /// for Kinect V2.0
     /// </summary>
     public class PrimitiveDriver : PrimitiveDriverBase, IDisposable

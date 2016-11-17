@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Drawing;
-
-namespace RogyWatchCommon {
+﻿namespace RogyWatchCommon
+{
     namespace Primitive.DriverInterface
     {
+        /// <summary>
+        /// Primitive Driver should implement.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
         public interface IPrimitiveDriver<T>
         {
             ushort RANGE_X { get; }

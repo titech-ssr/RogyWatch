@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using RogyWatchCommon;
+﻿using RogyWatchCommon;
 
 namespace PrimitiveServerModule
 {
+    /// <summary>
+    /// Provide Unified Interface to access Kinect V1 and V2
+    /// </summary>
     public class PrimitiveServer
     {
         private static object _lock1 = new object();

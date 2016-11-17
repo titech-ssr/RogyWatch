@@ -4,7 +4,6 @@ using APIServerModule;
 using System.Net;
 using RogyWatchCommon;
 using System.Net.Sockets;
-using System.Threading.Tasks;
 using System.Text;
 using System.Threading;
 using System.Linq;
@@ -120,7 +119,7 @@ namespace APIServerTest
         {
             var core = new APIServerCoreTest();
             var config = new Config();
-            APIServerExterior.StartUDPServer(core, config);
+            APIServerExterior.StartUDPServer(core);
 
             var _udp = new UdpClient(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 4500));
 

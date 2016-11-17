@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using RogyWatchCommon;
@@ -10,16 +9,12 @@ namespace APIServerModule
     static partial class APIServerExterior  // Common
     {
         /// <summary>
-        /// Start API servers
+        /// Start API servers. Bloking method.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="core"></param>
         public static void StartAPIServer<T>(T core) where T : IAPIServerCore
         {
-            //StartUDPServer(core);
-            //StartPipeServer(core);
-            //StartWebSocketServer(core);
-
             var tasks = new List<Task>();
             foreach (var server in core.Config.Start)
                 tasks.Add((Task)typeof(APIServerExterior)
@@ -30,15 +25,27 @@ namespace APIServerModule
                 task.Wait();
         }
 
-        // Result ex.            
+        /// <summary>
+        /// for UDP and NamedPipe, interpret received data and invoke some method and returns serialized byte[]
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="data"></param>
+        /// <param name="core"></param>
+        /// <returns></returns>
+        //
+        // Interpret<T>(data, core) returns for example...
+        // 
         //  data[0]              data[1]             data[2]         data[3]             data[4]...
         //
         //                        +------- Interpret Succeeded? ( 0:false, 1:true)
-        //                        |+------+-- specify size of "data size" as byte unit  +------------------------- Data
+        //                        |+------+-- specify size of "data size" in byte       +------------------------- Data
         // 0b0000 0000          0b1000 0010         0b0000 0001     0b0000 0000         0b0000 0000     0b0010 1100 .....
-        //   |+------+---- API                      +-------------------------+-- specify data size as byte unit
+        //   |+------+---- API                      +-------------------------+-- specify data size in bytet
         //   +------------ Kinect Version. 1 => V1, 0 => V2
-        // Response to GetDepth of KinectV2, Interpret Succeeded and size of "data size" is 2 bytes(Uint16) and data size is 256 bytes
+        //
+        // This means: 
+        //  Response to GetDepth( data[0] 1..7bit) of KinectV2( MSB of data[0]) , 
+        //  Interpret Succeeded( MSB of data[1] ) and size of "data size" is 2 bytes(Uint16) and data size is 256 bytes
         // i.e, Got 256 bytes of Depth Data from KinectV2.
         private static byte[] Interpret<T>(byte[] data,T core) where T : IAPIServerCore
         {
@@ -78,7 +85,8 @@ namespace APIServerModule
         }
 
         /// <summary>
-        /// Generate result bytes from KinectVersion, api, status, data bytes
+        /// Serialize raw data received from GetDepth, Get, HowManyPeople, and so on into byte[] series. <para></para>
+        /// requires KinectVersion, api, status, data bytes. for ex. GenerateResult( version | api, Status.Succeeded, data)
         /// </summary>
         /// <param name="head"></param>
         /// <param name="status"></param>
@@ -101,7 +109,8 @@ namespace APIServerModule
         }
 
         /// <summary>
-        /// calculate size [bytes] of "data size" area from actual data size
+        /// calculate size (in byte) of "data size" area from actual data size <para></para>
+        /// for ex. to express length of 256bytes data, "data size" area requires 2bytes. RequiredSizeofDataSize(256) -> 2
         /// </summary>
         /// <returns></returns>
         public static byte RequiredSizeofDataSize(int dsize)
@@ -112,7 +121,7 @@ namespace APIServerModule
         }
 
         /// <summary>
-        /// parse command to server. Nullable return.
+        /// Parse received data and invoke method. Nullable return.
         /// </summary>
         /// <param name="line"></param>
         /// <returns></returns>

@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 using Newtonsoft.Json;
-using System.ComponentModel;
 using System.IO;
 
 namespace RogyWatchCommon
@@ -20,6 +15,9 @@ namespace RogyWatchCommon
         string[] Start { get; set; }
     }
 
+    /// <summary>
+    /// Config class for save/recover settings. Using Json.NET
+    /// </summary>
     [JsonObject()]
     public partial class Config : IConfig
     {

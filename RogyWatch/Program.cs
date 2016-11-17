@@ -1,13 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using RogyWatchCommon;
 using APIServerModule;
 
 namespace RogyWatch
 {
+    /// <summary>
+    /// RogyWatch Main
+    /// </summary>
     class Program
     {
         static void Main(string[] args)
