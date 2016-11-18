@@ -87,5 +87,6 @@ stream.user{|status|
 
 } 
 rescue Exception => e
-  puts e
+  puts e.message, e.backtrace, DateTime.now.to_s
+  exit 1
 end
