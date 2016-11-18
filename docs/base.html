@@ -40,8 +40,75 @@
 <div class="listingblock">
 <div class="title">config.json</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-javascript" data-lang="javascript"></code></pre>
+<pre class="highlightjs highlight"><code class="language-javascript" data-lang="javascript">{
+    "primitive_driver_v1": {
+        "Limit": 10000,
+        "DEPTH_X": 640,
+        "DEPTH_Y": 480
+    },
+    "primitive_driver_v2": {
+        "Limit": 10000,
+        "DEPTH_X": 512,
+        "DEPTH_Y": 424
+    },
+    "named_pipe": {
+        "Host": "Kinect",
+        "Port": 0
+    },
+    "udp": {
+        "Host": "127.0.0.1",
+        "Port": 4000
+    },
+    "websocket_std": {
+        "Host": "*",
+        "Port": 8000
+    },
+    "websocket_std_err": {
+        "Host": "*",
+        "Port": 8500,
+        "ConnectionTimeout": 5
+    },
+    "start":["WebSocket"]
+}</code></pre>
 </div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">primitive_driver</dt>
+<dd>
+<p>PrimitiveDriverの設定。Kinectから取得するDepthデータの解像度、データ取得の最大試行回数の設定を行う。ただし現在のAtteiアルゴリズムでは上記のパラメータに固定されているので今のところ設定は意味をなさない。</p>
+</dd>
+<dt class="hdlist1">named_pipe</dt>
+<dd>
+<p>名前付きパイプの名前を指定。Portは使用しないので適当に設定。</p>
+</dd>
+<dt class="hdlist1">udp</dt>
+<dd>
+<p>UDPサーバーの設定</p>
+</dd>
+<dt class="hdlist1">websocket</dt>
+<dd>
+<p>各接続の設定をする。ただし標準エラー出力については接続待受のタイムアウトを設定する。</p>
+</dd>
+<dt class="hdlist1">start</dt>
+<dd>
+<p>起動するサーバーを設定する。WebSocket、UDP、NamedPipeが用意されている。</p>
+</dd>
+</dl>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>設定値のデフォルトはRogyWatchCommon.Configクラスなどを参照</p>
+</div>
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -82,7 +149,7 @@
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-11-18 01:08:56 JST
+Last updated 2016-11-18 18:32:13 JST
 </div>
 </div>
 <link rel="stylesheet" href="highlight/styles/dracula.min.css">

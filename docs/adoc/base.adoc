@@ -23,7 +23,53 @@
 [source,javascript]
 .config.json
 ----
+{
+    "primitive_driver_v1": {
+        "Limit": 10000,
+        "DEPTH_X": 640,
+        "DEPTH_Y": 480
+    },
+    "primitive_driver_v2": {
+        "Limit": 10000,
+        "DEPTH_X": 512,
+        "DEPTH_Y": 424
+    },
+    "named_pipe": {
+        "Host": "Kinect",
+        "Port": 0
+    },
+    "udp": {
+        "Host": "127.0.0.1",
+        "Port": 4000
+    },
+    "websocket_std": {
+        "Host": "*",
+        "Port": 8000
+    },
+    "websocket_std_err": {
+        "Host": "*",
+        "Port": 8500,
+        "ConnectionTimeout": 5
+    },
+    "start":["WebSocket"]
+}
 ----
+
+primitive_driver::
+PrimitiveDriverの設定。Kinectから取得するDepthデータの解像度、データ取得の最大試行回数の設定を行う。ただし現在のAtteiアルゴリズムでは上記のパラメータに固定されているので今のところ設定は意味をなさない。
+named_pipe::
+名前付きパイプの名前を指定。Portは使用しないので適当に設定。
+udp::
+UDPサーバーの設定
+websocket::
+各接続の設定をする。ただし標準エラー出力については接続待受のタイムアウトを設定する。
+start::
+起動するサーバーを設定する。WebSocket、UDP、NamedPipeが用意されている。
+
+[IMPORTANT]
+====
+設定値のデフォルトはRogyWatchCommon.Configクラスなどを参照
+====
 
 [[rogy-watch-warning]]
 == 注意
