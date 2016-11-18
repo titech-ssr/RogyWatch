@@ -13,7 +13,8 @@
 [[outline]]
 == 概要
 
-人多いBotのTwitterインターフェースである。また、デバッグ用にhtmlのクライアントも用意されている。必要であれば適切なファイル名/ディレクトリ名でclient/以下に追加すること。
+人多いBotのTwitterインターフェースである。また、デバッグ用にhtmlのクライアントも用意されている。必要であれば適切なファイル名/ディレクトリ名でclient/以下に追加すること。 +
+稼働時にはディレクトリ構成は以下のようになっている必要がある。
 
 
 .構成
@@ -21,11 +22,13 @@
 client/
 ├── bot/
 │   ├── Gemfile
+│   ├── config.yaml
 │   ├── dummy_server.rb
 │   ├── lib/
 │   │   ├── bot.rb
 │   │   └── tools.rb
-│   └── rogywatch.rb
+│   ├── rogywatch.rb
+│   └── rogywatch.sh*
 ├── main.js
 └── websocket.html
 ----
@@ -77,7 +80,27 @@ WebSocketServerに関する情報。
   err:::
   標準エラー出力の情報
     timeout::::
-    read(timeout)に指定する値。超過した場合Timeout::Errorが投げられる。
+    read(timeout)に指定する値。超過した場合 https://docs.ruby-lang.org/ja/latest/class/Timeout=3a=3aError.html[Timeout::Error] が投げられる。
     connection_timeout::::
     標準エラー出力につなぐ際のタイムアウトを設定する。設定したタイムアウトを超過し、標準エラー出力との接続に失敗した場合、例外情報を含む全ての情報が標準入出力経由のやり取りとなる。
 
+
+[[behavior]]
+== 動作
+
+ツイートを調べてサーバーに接続してリプを返すシンプルな動作であるが、少々注意が必要である。
+
+[[connect-to-websocket]]
+=== WebSocketAPIへの接続
+
+多くのWebSocketライブラリではコールバックを設定して非同期で通信を行うのが主流であるが、本プログラムではツイートへの応答、標準入出力と標準エラー出力への接続を考えてタイムアウトと同期メソッドを用いて実現している。WebSocketについては接続自体は複雑ではないが、フレームの処理が少々面倒であるので以下などを参考にすると良い。
+
+http://blog.honeybadger.io/building-a-simple-websockets-server-from-scratch-in-ruby/
+https://github.com/shokai/websocket-client-simple/blob/master/lib/websocket-client-simple/client.rb
+
+
+[[read]]
+=== 受信の際の動作
+
+read(timeout)メソッドにてサーバーからの情報を受信するが、当然引数にはタイムアウトを設定する。 +
+また、標準エラー出力は単にサーバーが標準入出力とは別の接続で情報を送ってくるだけであるが、read(timeout)メソッド内では標準エラー出力から情報を受信すると例外を発生させるようにしている。

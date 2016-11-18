@@ -18,6 +18,12 @@
 <ul class="sectlevel1">
 <li><a href="#outline">1. 概要</a></li>
 <li><a href="#twitter-bot-configuration">2. 設定</a></li>
+<li><a href="#behavior">3. 動作</a>
+<ul class="sectlevel2">
+<li><a href="#connect-to-websocket">3.1. WebSocketAPIへの接続</a></li>
+<li><a href="#read">3.2. 受信の際の動作</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -26,7 +32,8 @@
 <h2 id="outline">1. 概要</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>人多いBotのTwitterインターフェースである。また、デバッグ用にhtmlのクライアントも用意されている。必要であれば適切なファイル名/ディレクトリ名でclient/以下に追加すること。</p>
+<p>人多いBotのTwitterインターフェースである。また、デバッグ用にhtmlのクライアントも用意されている。必要であれば適切なファイル名/ディレクトリ名でclient/以下に追加すること。<br>
+稼働時にはディレクトリ構成は以下のようになっている必要がある。</p>
 </div>
 <div class="listingblock">
 <div class="title">構成</div>
@@ -34,11 +41,13 @@
 <pre>client/
 ├── bot/
 │   ├── Gemfile
+│   ├── config.yaml
 │   ├── dummy_server.rb
 │   ├── lib/
 │   │   ├── bot.rb
 │   │   └── tools.rb
-│   └── rogywatch.rb
+│   ├── rogywatch.rb
+│   └── rogywatch.sh*
 ├── main.js
 └── websocket.html</pre>
 </div>
@@ -113,7 +122,7 @@
 <dl>
 <dt class="hdlist1">timeout</dt>
 <dd>
-<p>read(timeout)に指定する値。超過した場合Timeout::Errorが投げられる。</p>
+<p>read(timeout)に指定する値。超過した場合 <a href="https://docs.ruby-lang.org/ja/latest/class/Timeout=3a=3aError.html">Timeout::Error</a> が投げられる。</p>
 </dd>
 <dt class="hdlist1">connection_timeout</dt>
 <dd>
@@ -129,10 +138,35 @@
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="behavior">3. 動作</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>ツイートを調べてサーバーに接続してリプを返すシンプルな動作であるが、少々注意が必要である。</p>
+</div>
+<div class="sect2">
+<h3 id="connect-to-websocket">3.1. WebSocketAPIへの接続</h3>
+<div class="paragraph">
+<p>多くのWebSocketライブラリではコールバックを設定して非同期で通信を行うのが主流であるが、本プログラムではツイートへの応答、標準入出力と標準エラー出力への接続を考えてタイムアウトと同期メソッドを用いて実現している。WebSocketについては接続自体は複雑ではないが、フレームの処理が少々面倒であるので以下などを参考にすると良い。</p>
+</div>
+<div class="paragraph">
+<p><a href="http://blog.honeybadger.io/building-a-simple-websockets-server-from-scratch-in-ruby/" class="bare">http://blog.honeybadger.io/building-a-simple-websockets-server-from-scratch-in-ruby/</a>
+<a href="https://github.com/shokai/websocket-client-simple/blob/master/lib/websocket-client-simple/client.rb" class="bare">https://github.com/shokai/websocket-client-simple/blob/master/lib/websocket-client-simple/client.rb</a></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="read">3.2. 受信の際の動作</h3>
+<div class="paragraph">
+<p>read(timeout)メソッドにてサーバーからの情報を受信するが、当然引数にはタイムアウトを設定する。<br>
+また、標準エラー出力は単にサーバーが標準入出力とは別の接続で情報を送ってくるだけであるが、read(timeout)メソッド内では標準エラー出力から情報を受信すると例外を発生させるようにしている。</p>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-11-18 00:49:24 JST
+Last updated 2016-11-18 17:50:38 JST
 </div>
 </div>
 <link rel="stylesheet" href="highlight/styles/dracula.min.css">
