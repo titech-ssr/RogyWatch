@@ -1,0 +1,13 @@
+# coding: utf-8
+
+SOURCE_ADOCS = Dir.glob("*.adoc")
+NAMES = SOURCE_ADOCS.map{|n| "#{n[/^(\w+)\./,1]}" }
+
+NAMES.each{|f|
+  file "../#{f}.html" => ["./#{f}.adoc"] do
+    puts "generate #{f}.html"
+    system "asciidoctor -D ../ #{f}.adoc"
+  end
+}
+
+task :default => NAMES.map{|n| "../#{n}.html" }
