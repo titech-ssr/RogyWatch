@@ -13,7 +13,7 @@
 [[outline]]
 == 概要
 
-https://github.com/titech-ssr/RogyWatch[部室人多いBot](以下人多いBot)はロ技研部室内にいる人の数を教えてくれるプログラムである。Kinectより取得したデータをもとに人数を取得する。 +
+https://github.com/titech-ssr/RogyWatch[部室人多いBot] (以下人多いBot)は https://twitter.com/intent/user?user_id=1492801394[@paste_link] によってつくられた、ロ技研部室内にいる人の数を教えてくれるプログラムである。現在は二代目である。Kinectより取得したデータをもとに人数を取得する。 +
 人多いBotの大まかな構成は以下のようになっている。
 
 .構成
