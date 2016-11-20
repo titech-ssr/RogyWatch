@@ -1,2 +1,2 @@
 ../client/bot/**/*.rb
--o client/
+--exclude ../client/bot/vendor/*
