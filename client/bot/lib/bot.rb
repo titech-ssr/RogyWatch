@@ -17,12 +17,14 @@ module RogyWatch
     #
     # @param [Fixnum] err_timeout specify timeout to connect stderr
     # @return [void]
-    def connect(err_timeout)
+    def connect(std_timeout, err_timeout)
 
-      @std, @std_handshake = handshake(@ws_conf[:std][:address], @ws_conf[:std][:port], ->(){ puts "std Opend" })
-      sleep 1
+      Timeout.timeout(std_timeout){
+      @std, @std_handshake = handshake(@ws_conf[:std][:address], @ws_conf[:std][:port], ->(){ puts "std Opend #{DateTime.now.to_s}" })
+      } rescue throw Timeout::Error.new("std connectoin failed")
+      sleep 0.5
       Timeout.timeout(err_timeout){
-        @err, @err_handshake = handshake(@ws_conf[:err][:address], @ws_conf[:err][:port], ->(){ puts "err Opend" })
+        @err, @err_handshake = handshake(@ws_conf[:err][:address], @ws_conf[:err][:port], ->(){ puts "err Opend #{DateTime.now.to_s}" })
       } rescue puts "std err connection #{$!}"
 
     end
