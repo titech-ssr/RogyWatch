@@ -22,8 +22,8 @@ namespace APIServerModule
 
         public string HowManyPeople(IEnumerable<string> date)
         {
-            var depth1 = PrimitiveServer.GetDepth<short[]>(KinectVersion.V1);   Console.WriteLine("     Got Depth1 data");
-            var depth2 = PrimitiveServer.GetDepth<ushort[]>(KinectVersion.V2);  Console.WriteLine("     Got Depth2 data");
+            var depth1 = PrimitiveServer.GetDepth<short[]>(KinectVersion.V1);   Log.logger.Info("     Got Depth1 data");
+            var depth2 = PrimitiveServer.GetDepth<ushort[]>(KinectVersion.V2);  Log.logger.Info("     Got Depth2 data");
 
             var count1 = Attei.Attei.PersonCounter(date.First(), KinectVersion.V1, depth1, Config);
             var count2 = Attei.Attei.PersonCounter(date.First(), KinectVersion.V2, depth2, Config);
