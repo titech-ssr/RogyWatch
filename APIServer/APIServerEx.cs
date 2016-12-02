@@ -51,7 +51,7 @@ namespace APIServerModule
                     _reader.Close();
                     _writer.Close();
                     _pipe.Close();
-                }catch(Exception ex) { Console.WriteLine($"{ex.Message}\n{ex.StackTrace}"); }
+                }catch(Exception ex) { Log.logger.Error($"{ex.Message}\n{ex.StackTrace}"); }
             }
         }
 
@@ -81,7 +81,7 @@ namespace APIServerModule
                 _writer.Write(result);
                 _writer.Flush();
             }catch(Exception ex) {
-                Console.WriteLine($"{ex.Message}\n{ex.StackTrace}");
+                Log.logger.Error($"{ex.Message}\n{ex.StackTrace}");
             }
         }
 
@@ -107,7 +107,7 @@ namespace APIServerModule
                 }
                 catch (IOException ex)
                 {
-                    Console.WriteLine($"{ex.Message}\n{ex.StackTrace}");
+                    Log.logger.Error($"{ex.Message}\n{ex.StackTrace}");
 
                     // エラー処理
                     _pipe.Close();
@@ -181,7 +181,7 @@ namespace APIServerModule
                 _client.Connect(remote);
                 _client.Send(result, result.Length);
             }catch(Exception ex) {
-                Console.WriteLine($"{ex.Message}\n{ex.StackTrace}");
+                Log.logger.Error($"{ex.Message}\n{ex.StackTrace}");
             }
         }
     }

@@ -17,6 +17,11 @@ namespace RogyWatchCommon
         public T Z;
     }
 
+    public class Log
+    {
+        public static NLog.Logger logger { get; set; }
+    } 
+
     [Serializable()]
     public class KinectNotFoundException : System.IO.IOException
     {
