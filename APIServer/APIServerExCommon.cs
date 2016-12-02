@@ -132,7 +132,7 @@ namespace APIServerModule
                 return typeof(T).GetMethod(line)?.Invoke(core, new[] { line });
             }catch(Exception ex)
             {
-                Console.WriteLine($"{ex.Message}\n{ex.StackTrace}");
+                Log.logger.Error($"{ex.Message}\n{ex.StackTrace}");
                 return null;
             }
         }
