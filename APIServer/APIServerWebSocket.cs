@@ -59,6 +59,7 @@ namespace APIServerModule
                     var listenerContext = _httpListener.GetContext();
                     if (listenerContext.Request.IsWebSocketRequest)
                     {
+                        Console.WriteLine($"{DateTime.Now} Connected std");
                         WebSocket ws_err = null;
                         var errContext = _errHttplistener.GetContextAsync();
                         var ws = listenerContext.AcceptWebSocketAsync(subProtocol: null).Result.WebSocket;
@@ -67,6 +68,7 @@ namespace APIServerModule
                             if (errContext.Result.Request.IsWebSocketRequest)
                             {
                                 ws_err = (errContext.Result.AcceptWebSocketAsync(subProtocol: null)).Result.WebSocket;
+                                Console.WriteLine($"{DateTime.Now} Connected err");
                             }
                             else
                             {
@@ -142,6 +144,7 @@ namespace APIServerModule
             try
             {
                 var result = core.Invoke<IEnumerable<string>>(line);
+                Console.WriteLine($"{DateTime.Now} result={result}");
                 var response = Encoding.UTF8.GetBytes(result.ToString());
                 ws.SendAsync(new ArraySegment<byte>(response), WebSocketMessageType.Text, true, System.Threading.CancellationToken.None);
             }catch(Exception ex)
@@ -151,6 +154,7 @@ namespace APIServerModule
                     WebSocketMessageType.Text, 
                     true, 
                     System.Threading.CancellationToken.None);
+                Console.WriteLine($"{ex.Message}\n{ex.StackTrace}");
             }
         }
     }

@@ -14,6 +14,7 @@ namespace RogyWatch
             try
             {
                 var core = new APIServerCore() { Config = Config.DeSerialize() };
+                Console.WriteLine($"Config:\n{core.Config.ToString()}");
                 APIServerExterior.StartAPIServer(core);
             }
             catch (Exception ex)
