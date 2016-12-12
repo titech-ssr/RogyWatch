@@ -123,6 +123,7 @@ namespace APIServerModule
                 }catch(Exception ex)
                 {
                     RogyWatchCommon.Log.logger.Error($"Session abort {lisCon.Request.RemoteEndPoint.Address}\n{ex.Message}\n{ex.StackTrace}");
+                    RogyWatchCommon.Log.logger.Error($"Inner Exception: {ex.InnerException}");
                     break;
                 }
             }
