@@ -145,7 +145,7 @@ module RogyWatch
     def close
       send(nil, type: :close)
       begin
-        frame = WebSocket::Frame::Outgoing::Client.new(data: "close", type: :close, version: @err_handshake.version)
+        frame = WebSocket::Frame::Outgoing::Client.new(data: "close", type: :close, version: @err_handshake&.version)
         @err&.write frame.to_s
       rescue Errno::EPIPE => e
         $stderr.puts "#{e.message}\n#{e.backtrace}"

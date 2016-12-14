@@ -39,6 +39,7 @@ stream.user{|status|
     when Twitter::Tweet then
       #puts "#{status.user.screen_name}\n#{status.text} #{(reply = status.text =~ /@#{ScreenName}/) && status.user.id == Admin} #{reply}"
       content = status.text.gsub(/@#{ScreenName}/, "").strip
+      next if status.user.screen_name == ScreenName.to_s
 
       if (reply = status.text =~ /@#{ScreenName}/) && status.user.id == Admin then
         now = "#{(d = DateTime.now).year}_#{d.month}_#{d.day}_#{d.hour}_#{d.second}"
@@ -82,7 +83,7 @@ stream.user{|status|
             puts "result = #{result}"
             rest.update("@#{status.user.screen_name} #{result}\n#{d.to_s}"[0, 140], in_reply_to_status: status)
           rescue Exception => e
-            rest.update("@#{status.user.screen_name} #{e.message}\n#{d.to_s}"[0, 140], 
+            rest.update("@#{status.user.screen_name} 停電ぽい?#{e.message}\n#{d.to_s}"[0, 140], 
               in_reply_to_status: status) rescue puts("#{$!.message}\n#{$!.backtrace}")
             puts "@#{status.user.screen_name} #{e.message}\n#{e.backtrace}"
           ensure
