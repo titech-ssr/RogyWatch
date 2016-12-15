@@ -42,7 +42,7 @@ namespace PrimitiveServerModule
                 kinect1 = ret1.Result;
             }catch(Exception ex)
             {
-                Log.logger.Warn($"kinect1 threw Exception {ex.Message}\n{ex.StackTrace}");
+                Log.logger.Warn($"kinect1 threw Exception: {ex.Message}\n{ex.StackTrace}");
                 kinect1 = false;
             }
 
@@ -52,7 +52,7 @@ namespace PrimitiveServerModule
                 kinect2 = ret2.Result;
             }catch(Exception ex)
             {
-                Log.logger.Warn($"kinect2 threw Exception {ex.Message}\n{ex.StackTrace}");
+                Log.logger.Warn($"kinect2 threw Exception: {ex.Message}\n{ex.StackTrace}");
                 kinect2 = false;
             }
 
