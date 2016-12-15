@@ -76,5 +76,18 @@ namespace PrimitivesTest
                 defult.PrimitiveDriverV2.DEPTH_X*defult.PrimitiveDriverV2.DEPTH_Y
                 , depth2.Length);
         }
+
+        /// <summary>
+        /// Check connection to Kinect V1 & V2.
+        /// Result dependents on hardware.
+        /// </summary>
+        [TestMethod]
+        public void CheckConnection_Test()
+        {
+            Log.logger = NLog.LogManager.GetCurrentClassLogger();
+            Log.logger.Info("Connection Test Started");
+            var result = PrimitiveServerModule.PrimitiveServer.CheckConnection(10.0, 10.0);
+            Assert.IsTrue(result.Equals(new System.Tuple<bool,bool>(true, true)));
+        }
     }
 }

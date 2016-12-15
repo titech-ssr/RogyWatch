@@ -74,12 +74,18 @@ namespace APIServerModule
                             {
                                 errContext.Result.Response.StatusCode = 400;
                                 errContext.Result.Response.Close();
+                                RogyWatchCommon.Log.logger.Warn("err connection is not websocket request");
                             }
+                        }
+                        else
+                        {
+                            RogyWatchCommon.Log.logger.Warn("Connection to err refused");
                         }
                         Task.Run(() => OnReceiveWS(listenerContext, ws, ws_err, core));
                     }
                     else
                     {
+                        RogyWatchCommon.Log.logger.Warn("std connection is not websocket request");
                         listenerContext.Response.StatusCode = 400;
                         listenerContext.Response.Close();
                     }

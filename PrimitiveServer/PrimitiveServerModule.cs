@@ -5,7 +5,7 @@ namespace PrimitiveServerModule
     /// <summary>
     /// Provide Unified Interface to access Kinect V1 and V2
     /// </summary>
-    public class PrimitiveServer
+    public partial class PrimitiveServer
     {
         private static object _lock1 = new object();
         private static object _lock2 = new object();
