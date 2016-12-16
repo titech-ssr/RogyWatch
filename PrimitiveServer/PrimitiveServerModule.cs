@@ -1,4 +1,7 @@
 ﻿using RogyWatchCommon;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PrimitiveServerModule
 {
@@ -47,5 +50,36 @@ namespace PrimitiveServerModule
                 return depth;
             }
         } // End of GetDepth
+
+        /// <summary>
+        /// Get depth Asynchronously from kinect with specified version and Cast depth data with type parameter. </para>
+        /// Without reason, Kinect V2 should output ushort[] and V1 should short[] </para>
+        /// Possibly, TimeoutException or OpenFailed Exception threw.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="V">Kinect Version</param>
+        /// <param name="timeout">milli seconds</param>
+        /// <returns></returns>
+        public static async Task<T> GetDepthAsync<T>(KinectVersion V, int timeout)
+        {
+            var cts = new CancellationTokenSource();
+            var task = Task.Run(() => GetDepth<T>(V), cts.Token);
+
+            try
+            {
+                if (await Task.WhenAny(task, Task.Delay(timeout)) == task)
+                {
+                    return task.Result;
+                }
+                else
+                {
+                    cts.Cancel();
+                    throw new TimeoutException($"GetDepthAsync Kinect{V} timeout!");
+                }
+            }catch(AggregateException ex)
+            {
+                throw ex.InnerException;
+            }
+        }
     }
 }

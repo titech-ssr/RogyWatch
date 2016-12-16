@@ -86,8 +86,16 @@ namespace PrimitivesTest
         {
             Log.logger = NLog.LogManager.GetCurrentClassLogger();
             Log.logger.Info("Connection Test Started");
-            var result = PrimitiveServerModule.PrimitiveServer.CheckConnection(10.0, 10.0);
-            Assert.IsTrue(result.Equals(new System.Tuple<bool,bool>(true, true)));
+            var result = PrimitiveServerModule.PrimitiveServer.CheckConnection(10000, 10000);
+            Assert.IsTrue(result.Item1);
+            Assert.IsTrue(result.Item2);
+        }
+
+        [TestMethod]
+        public void GetDepthAsync_Test()
+        {
+            var futureDepth = PrimitiveServerModule.PrimitiveServer.GetDepthAsync<short[]>(KinectVersion.V1, 5000);
+            System.Console.WriteLine($"depth size is {futureDepth.Result.Length}");
         }
     }
 }
