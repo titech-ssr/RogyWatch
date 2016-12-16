@@ -18,7 +18,7 @@ namespace RogyWatch
                 Log.logger.Info("RogyWatch Started");
 
                 Log.logger.Info("Connection checking...");
-                var check = PrimitiveServer.CheckConnection(10.0, 10.0);
+                var check = PrimitiveServer.CheckConnection(10000, 10000);
                 if (!(check.Item1 || check.Item2)) throw new System.IO.IOException("All connection to kinect unavailable!");
                 Log.logger.Info($"Connection result V1:{check.Item1}, V2:{check.Item2}");
 
