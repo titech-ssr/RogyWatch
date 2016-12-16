@@ -23,45 +23,23 @@ namespace APIServerModule
 
         public string HowManyPeople(IEnumerable<string> date)
         {
-            short[] depth1;
-            string count1;
+            var depth1 = PrimitiveServer.GetDepthAsync<short[]>(KinectVersion.V1, 10000);
+            var depth2 = PrimitiveServer.GetDepthAsync<ushort[]>(KinectVersion.V2, 10000);
+            string count1, count2;
             try
             {
-                var cts = new CancellationTokenSource();
-                var task = Task.Run(() => PrimitiveServer.GetDepth<short[]>(KinectVersion.V1), cts.Token);
-                if (task.Wait(TimeSpan.FromSeconds(10.0)))
-                {
-                    depth1 = task.Result;
-                    Log.logger.Info("     Got Depth1 data");
-                    count1 = Attei.Attei.PersonCounter(date.First(), KinectVersion.V1, depth1, Config).ToString();
-                }
-                else
-                {
-                    count1 = "?";
-                    cts.Cancel();
-                }
+                count1 = Attei.Attei.PersonCounter(date.First(), KinectVersion.V1, depth1.Result, Config).ToString();
+                Log.logger.Info("     Got Depth1 data");
             }catch(Exception ex)
             {
                 Log.logger.Error($"{ex.Message}\n{ex.StackTrace}");
                 count1 = "?";
             }
 
-            ushort[] depth2;
-            string count2;
             try
             {
-                var cts = new CancellationTokenSource();
-                var task = Task.Run(() => PrimitiveServer.GetDepth<ushort[]>(KinectVersion.V2), cts.Token);
-                if (task.Wait(TimeSpan.FromSeconds(10.0)))
-                {
-                    depth2 = task.Result;
-                    Log.logger.Info("     Got Depth2 data");
-                    count2 = Attei.Attei.PersonCounter(date.First(), KinectVersion.V2, depth2, Config).ToString();
-                }else
-                {
-                    count2 = "?";
-                    cts.Cancel();
-                }
+                count2 = Attei.Attei.PersonCounter(date.First(), KinectVersion.V2, depth2.Result, Config).ToString();
+                Log.logger.Info("     Got Depth2 data");
             }catch(Exception ex)
             {
                 Log.logger.Error($"{ex.Message}\n{ex.StackTrace}");
