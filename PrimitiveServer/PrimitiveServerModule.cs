@@ -54,7 +54,7 @@ namespace PrimitiveServerModule
         /// <summary>
         /// Get depth Asynchronously from kinect with specified version and Cast depth data with type parameter. </para>
         /// Without reason, Kinect V2 should output ushort[] and V1 should short[] </para>
-        /// Possibly, TimeoutException or OpenFailed Exception threw.
+        /// Possibly, AggregateException threw and its InnerException may be TimeoutException or OpenFailed Exception.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="V">Kinect Version</param>

@@ -26,18 +26,18 @@ namespace PrimitiveServerModule
             try
             {
                 futureDepth1.Wait();
-            }catch(Exception ex)
+            }catch(AggregateException ex)
             {
-                Log.logger.Warn($"kinect1 threw Exception {ex.Message}\n{ex.StackTrace}");
+                Log.logger.Warn($"kinect1 threw Exception: {ex.InnerException.Message}\n{ex.InnerException.StackTrace}");
                 kinect1 = false;
             }
 
             try
             {
                 futureDepth2.Wait();
-            }catch(Exception ex)
+            }catch(AggregateException ex)
             {
-                Log.logger.Warn($"kinect2 threw Exception {ex.Message}\n{ex.StackTrace}");
+                Log.logger.Warn($"kinect2 threw Exception: {ex.InnerException.Message}\n{ex.InnerException.StackTrace}");
                 kinect2 = false;
             }
 

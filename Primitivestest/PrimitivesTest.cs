@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RogyWatchCommon;
+using System;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
@@ -94,8 +95,14 @@ namespace PrimitivesTest
         [TestMethod]
         public void GetDepthAsync_Test()
         {
-            var futureDepth = PrimitiveServerModule.PrimitiveServer.GetDepthAsync<short[]>(KinectVersion.V1, 5000);
-            System.Console.WriteLine($"depth size is {futureDepth.Result.Length}");
+            try
+            {
+                var futureDepth = PrimitiveServerModule.PrimitiveServer.GetDepthAsync<short[]>(KinectVersion.V1, 5000);
+                Console.WriteLine($"depth size is {futureDepth.Result.Length}");
+            }catch(AggregateException ex)
+            {
+               throw ex.InnerException;
+            }
         }
     }
 }
