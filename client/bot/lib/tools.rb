@@ -37,7 +37,7 @@ end
 def upload(files, rest)
   media_ids = []
   files.each do |media_filename|
-    media_ids << rest.upload(File.new(media_filename))
+    media_ids << rest.upload(File.new(media_filename)) if File.exist?(media_filename)
   end
   media_ids
 end
