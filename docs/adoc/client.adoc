@@ -46,7 +46,9 @@ rogywatch.rbは同ディレクトリに配置されたconfig.yamlを設定ファ
   :consumer_secret      :  "rogy_watch_consumer_secret"
   :access_token         :  "rogy_watch_access_token"
   :access_token_secret  :  "rogy_watch_access_token_secret"
-  :admin                : 114514
+  :admin                : 
+  - 114514
+  - 334334
   :media_dirs           :
   - "/path/to/rogywatch/v1/output"
   - "/path/to/rogywatch/v2/output"
