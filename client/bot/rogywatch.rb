@@ -11,6 +11,7 @@ require 'date'
 require 'bundler'
 require 'lib/tools'
 require 'lib/bot'
+require 'lib/admin'
 
 
 # Rogywatch twitter bot screen name
@@ -38,22 +39,14 @@ stream.user{|status|
 
     when Twitter::Tweet then
       #puts "#{status.user.screen_name}\n#{status.text} #{(reply = status.text =~ /@#{ScreenName}/) && status.user.id == Admin} #{reply}"
+
       content = status.text.gsub(/@#{ScreenName}/, "").strip
+      # cancel self rep
       next if status.user.screen_name == ScreenName.to_s
 
-      if (reply = status.text =~ /@#{ScreenName}/) && status.user.id == Admin then
-        now = "#{(d = DateTime.now).year}_#{d.month}_#{d.day}_#{d.hour}_#{d.second}"
-        Thread.new{
-          begin
-            p result = eval(content)
-            rest.update("@#{status.user.screen_name} #{result}\n#{d.to_s}", in_reply_to_status: status)
-          rescue => e
-            rest.update(
-              "@#{status.user.screen_name} #{e.message}\n#{d.to_s}", 
-              in_reply_to_status: status) rescue puts("#{$!.message}\n#{$!.backtrace}")
-              puts e.message,e.backtrace
-          end
-        }
+      # for Admin
+      if (reply = status.text =~ /@#{ScreenName}/) && Admin.include?(status.user.id) then
+        RogyWatch::Admin.handle(rest, status, content)
       elsif reply
         now = "#{(d = DateTime.now).year}_#{d.month}_#{d.day}_#{d.hour}_#{d.second}"
         Thread.new{
