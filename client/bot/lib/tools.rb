@@ -67,3 +67,6 @@ EOF
     media_ids: media_ids.join(','))
 end
 
+def date_string
+  now = "#{(d = DateTime.now).year}_#{d.month}_#{d.day}_#{d.hour}_#{d.second}"
+end 
