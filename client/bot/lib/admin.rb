@@ -45,6 +45,9 @@ module RogyWatch
 
     def help(dummy = 0)
       <<-"HELP"
+start
+stop
+update
 reload
 help
 HELP
