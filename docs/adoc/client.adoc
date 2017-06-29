@@ -52,6 +52,7 @@ rogywatch.rbは同ディレクトリに配置されたconfig.yamlを設定ファ
   :media_dirs           :
   - "/path/to/rogywatch/v1/output"
   - "/path/to/rogywatch/v2/output"
+  :restart_time: "24:00:00"
 :server:
     :ws:
       :std:
