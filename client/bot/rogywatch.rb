@@ -30,6 +30,20 @@ ws_conf = config[:server][:ws]
 bot = RogyWatch::Bot.new(ws_conf)
 
 
+Thread.new{
+  now = DateTime.now
+  config[ScreenName][:restart_time] =~ /(\d+):(\d+):(\d+)/
+
+  restart_time = DateTime.new(now.year, now.month, now.day, $1.to_i, $2.to_i, $3.to_i, now.offset)
+  time = (restart_time - now)*(3600*24.0)
+  time += 3600*24 if time < 0
+
+  puts "wait #{time} seconds, (#{Time.at(time).utc.strftime("%H:%M:%S")})"
+
+  sleep time
+  exit 0
+}
+
 puts "start streaming"
 
 begin
