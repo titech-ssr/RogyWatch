@@ -4,9 +4,25 @@ module RogyWatch
   module Admin
     extend self
 
+    class <<
+      attr_accessor :stopped
+    end
+    self.stopped = false
+
     public
 
+    def start(dummy = 0)
+      "Started ..."
+    end
+
+    def stop(dummy = 0)
+      self.stopped = true
+    end
+
     def handle(rest, status, content)
+      self.stopped = false if self.stopped and content =~ /start/
+      return if self.stopped
+
       d = DateTime.now
       Thread.new{
         begin

@@ -44,6 +44,12 @@ stream.user{|status|
       # cancel self rep
       next if status.user.screen_name == ScreenName.to_s
 
+      # stopped
+      if RogyWatch::Admin.stopped then
+        RogyWatch::Admin.handle(rest, status, content)
+        next
+      end
+
       # for Admin
       if (reply = status.text =~ /@#{ScreenName}/) && Admin.include?(status.user.id) then
         RogyWatch::Admin.handle(rest, status, content)
