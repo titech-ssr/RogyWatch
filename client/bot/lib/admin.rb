@@ -5,9 +5,10 @@ module RogyWatch
     extend self
 
     class <<
-      attr_accessor :stopped
+      attr_accessor :stopped, :emergency
     end
-    self.stopped = false
+    self.stopped   = false
+    self.emergency = false
 
     public
 
@@ -19,7 +20,11 @@ module RogyWatch
       self.stopped = true
     end
 
-    def handle(rest, status, content)
+    def emergency(dummy = 0)
+      self.emergency = true
+    end
+
+    def handle(bot, ws_conf, rest, status, content)
       self.stopped = false if self.stopped and content =~ /start/
       return if self.stopped
 
