@@ -4,6 +4,7 @@ using System.IO;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Media.Media3D;
+using RogyWatchCommon;
 //using TweetSharp;
 
 namespace Attei.PCL
@@ -88,6 +89,7 @@ namespace Attei.PCL
             }
             catch(Exception ex)
             {
+                Log.logger.Error($"{ex.Message}\n{ex.StackTrace}");
             }
         }
 
