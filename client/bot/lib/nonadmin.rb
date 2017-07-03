@@ -4,7 +4,8 @@ module RogyWatch
 
     public
 
-    def handle(bot, ws_conf, rest, status, content)
+    def handle(bot, config, rest, status, content)
+      ws_conf = config[:server][:ws]
       now = "#{(d = DateTime.now).year}_#{d.month}_#{d.day}_#{d.hour}_#{d.second}"
       Thread.new{
         begin
