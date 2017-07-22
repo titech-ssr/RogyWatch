@@ -1,0 +1,20 @@
+# RogyWatch Ruby Bot
+
+## systemd
+
+.rogywatch.service
+----
+[Unit]
+Description = rogywatch daemon
+
+[Service]
+ExecStart = /path/to/launch.sh
+#Type = oneshot
+Restart = always
+Type = simple
+User = rogywatch
+Group = rogywatch
+
+[Install]
+WantedBy = multi-user.target
+----
