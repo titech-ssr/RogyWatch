@@ -70,11 +70,11 @@ stream.user{|status|
       if (reply = status.text =~ /@#{ScreenName}/) && Admin.include?(status.user.id) then
         RogyWatch::Admin.handle(bot, ws_conf, rest, status, content)
       elsif reply
-        if RogyWatch::Admin.emergency then
-          rest.update("@#{status.user.screen_name} #{config[ScreenName][:emergency]}\n#{DateTime.now.to_s}"[0, 140], in_reply_to_status: status)
-        else
-          RogyWatch::NonAdmin.handle(bot, ws_conf, rest, status, content)
-        end
+        #if RogyWatch::Admin.emergency then
+          #rest.update("@#{status.user.screen_name} #{config[ScreenName][:emergency]}\n#{DateTime.now.to_s}"[0, 140], in_reply_to_status: status)
+        #else
+          RogyWatch::NonAdmin.handle(bot, config, rest, status, content)
+        #end
       end
 
     when Twitter::Streaming::Event then
