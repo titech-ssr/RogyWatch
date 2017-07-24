@@ -341,3 +341,6 @@ bye
 .*DS_Store
 
 sl.gif
+
+# ignore
+ignore/
