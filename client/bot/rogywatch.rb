@@ -78,6 +78,18 @@ stream.user{|status|
       end
 
     when Twitter::Streaming::Event then
+    when Twitter::DirectMessage then
+      if Admin.include?(status.sender.id) then
+        puts(t = status.text)
+        puts status.sender.screen_name
+
+        begin 
+          rest.create_direct_message(status.sender.screen_name, eval(t))
+        rescue Exception => ex
+          rest.create_direct_message(status.sender.screen_name, "#{ex.message}\n#{ex.backtrace}")
+        end
+      end
+    else
   end
 
 } 
